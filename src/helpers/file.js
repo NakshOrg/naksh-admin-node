@@ -1,4 +1,4 @@
-const uuidv4 = require('uuid/v4');
+const uuid = require('uuid');
 
 const S3 = require('aws-sdk/clients/s3');
 
@@ -24,7 +24,7 @@ exports.s3PutUrl = async ( module, totalFiles ) => {
 
     for(let i = 0; i < totalFiles; i++) {
 
-        params.Key = `${module}/${uuidv4()}`;
+        params.Key = `${module}/${uuid.v4()}`;
 
         s3Result = await new Promise((resolve, reject) => {
             s3.getSignedUrl('putObject', params, (err, url) => {

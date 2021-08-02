@@ -9,11 +9,12 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
+const { contextMiddleware } = require('./helpers/logger');
 
 const wallet = require('./routes/account');
 
-const { errorHandler } = require('./middlewares/errorHandler');
 const { notFound } = require('./middlewares/notFound');
+const { errorHandler } = require('./middlewares/errorHandler');
 
 app.use('/api/account', wallet);
 
