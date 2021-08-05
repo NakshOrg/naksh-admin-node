@@ -11,7 +11,7 @@ const logger = pino({
 
 module.exports.logger = new Proxy(logger, {
   get(target, property, receiver) {
-    target = context.getStore().get('logger') || target;
+    target = context.getStore()?.get('logger') || target;
     return Reflect.get(target, property, receiver);
   },
 });
