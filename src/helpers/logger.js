@@ -1,5 +1,5 @@
 const pino = require('pino');
-const uuid = require('uuid');
+const { v4: uuid } = require('uuid');
 
 const { AsyncLocalStorage } = require('async_hooks');
 
@@ -17,7 +17,7 @@ module.exports.logger = new Proxy(logger, {
 });
 
 module.exports.contextMiddleware = (req, res, next) => {
-  const child = logger.child({ requestId: uuid.v4() });
+  const child = logger.child({ requestId: uuid() });
   const store = new Map();
   store.set('logger', child);
 
