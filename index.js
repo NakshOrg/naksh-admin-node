@@ -1,15 +1,19 @@
-const dotenv = require('dotenv');
-
-dotenv.config();
+require('dotenv').config();
 
 require('./src/mongodb/mongoose');
+
+const { connection } = require('mongoose');
 
 const app = require('./src/app');
 
 const http = require('http');
 
-const httpServer = http.createServer(app);
+connection.once('open', () => {
+    
+    console.log('\x1b[36m%s\x1b[0m', "Database connected successfully");
+    
+    http.createServer(app).listen(process.env.PORT, () => {
+        console.log(`Administrator server is running on port ${process.env.PORT}`);
+    });
 
-httpServer.listen(process.env.PORT, () => {
-    console.log(`Administrator server is running on port ${process.env.PORT}`);
 });
