@@ -10,16 +10,16 @@ Backend application of Naksh for administrators
 
 ### Dependencies
 
-* Nodejs
-* npm
+* [Nodejs](https://nodejs.org/en/download/)
+* [npm](https://nodejs.org/en/download/)
 
 ### Installing
 
-* Run the following command
+* Run the following command in the project folder
 ```
 npm i
 ```
-* Create a .env file and set the environment variables
+* Create a .env file in the project folder and set the environment variables
 
 ### Executing program
 
