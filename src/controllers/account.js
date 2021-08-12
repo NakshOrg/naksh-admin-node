@@ -2,7 +2,7 @@ const { asyncHandler } = require('../middlewares/asyncHandler');
 
 const { ErrorResponse } = require('../helpers/error');
 
-const nearAPI = require("near-api-js");
+const { keyStores, connect, utils } = require("near-api-js");
 
 exports.connectWallet = asyncHandler( async (req, res, next) => {
     /*
@@ -40,7 +40,7 @@ exports.connectWallet = asyncHandler( async (req, res, next) => {
 
 exports.accountDetails = asyncHandler( async (req, res, next) => {
 
-    const keyStore = new nearAPI.keyStores.InMemoryKeyStore();
+    const keyStore = new keyStores.InMemoryKeyStore();
 
     const config = {
         networkId: "testnet",
@@ -51,7 +51,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
         explorerUrl: "https://explorer.testnet.near.org"
     };
 
-    const near = await nearAPI.connect(config);
+    const near = await connect(config);
 
     const account = await near.account(`${req.query.account}.testnet`);
 
@@ -61,6 +61,14 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     const state = await account.state();
 
-    res.send({ balance, details, state });
+    const accessKeys = await account.getAccessKeys();
+
+    const convertedBalance = {};
+
+    Object.keys(balance).forEach( property => {
+        convertedBalance[property] = utils.format.formatNearAmount(balance[property]);
+    });
+
+    return res.status(200).send({ balance, convertedBalance, details, state, accessKeys });
 
 });
