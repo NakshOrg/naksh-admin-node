@@ -35,15 +35,22 @@ exports.deleteOrganization = asyncHandler(async (req, res, next) => {
     return res.status(200).send({ organization });
 });
 
-exports.getOrganization = asyncHandler(async (req, res, next) => {
+exports.getAllOrganization = asyncHandler(async (req, res, next) => {
 
     const matchParams = {};
-
-    if(req.query.hasOwnProperty('id')) {
-        matchParams._id = req.query.id
-    }
 
     const organizations = await Organization.aggregate().match(matchParams);
 
     return res.status(200).send({ organizations });
+});
+
+exports.getOneOrganization = asyncHandler(async (req, res, next) => {
+
+    const organization = await Organization.findOne({ _id: req.query.id });
+
+    if(!organization) {
+        return next(new ErrorResponse(404, "organization not found"));
+    }
+
+    return res.status(200).send({ organization });
 });

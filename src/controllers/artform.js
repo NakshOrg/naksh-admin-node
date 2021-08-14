@@ -8,22 +8,22 @@ exports.addArtForm = asyncHandler(async (req, res, next) => {
 
     let result = [];
 
-    for(let i = 0; i < req.body.artforms; i++) {
+    for(let i = 0; i < req.body.artforms.length; i++) {
 
-        let artform = await Artform.findOne({ name: req.body.artform[i] });
+        let artform = await Artform.findOne({ name: req.body.artforms[i] });
         
         if(artform) {
 
-            result.push({ message: `${req.body.artform[i]} already exists` });
+            result.push( `${req.body.artforms[i]} already exists` );
 
         } else {
 
             await new Artform({
-                ...req.body,
+                name: req.body.artforms[i],
                 createdAt: Date.now()
             }).save();
 
-            result.push({ message: `${req.body.artform[i]} was added` });
+            result.push( `${req.body.artforms[i]} was added` );
         }
     }
 
@@ -53,15 +53,22 @@ exports.deleteArtForm = asyncHandler(async (req, res, next) => {
     return res.status(200).send({ artform });
 });
 
-exports.getArtform = asyncHandler(async (req, res, next) => {
+exports.getAllArtform = asyncHandler(async (req, res, next) => {
 
     const matchParams = {};
 
-    if(req.query.hasOwnProperty('id')) {
-        matchParams._id = req.query.id
-    }
-
-    const artforms = await getArtform.aggregate().match(matchParams);
+    const artforms = await Artform.aggregate().match(matchParams);
 
     return res.status(200).send({ artforms });
+});
+
+exports.getOneArtform = asyncHandler(async (req, res, next) => {
+
+    const artform = await Artform.findOne({ _id: req.query.id });
+
+    if(!artform) {
+        return next(new ErrorResponse(404, "artform not found"));
+    }
+    
+    return res.status(200).send({ artform });
 });

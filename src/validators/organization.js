@@ -42,7 +42,7 @@ exports.deleteOrganizationQuery = Joi.object().keys({
 
 });
 
-exports.geteOrganizationQuery = Joi.object().keys({
+exports.getOneOrganizationQuery = Joi.object().keys({
 
     id: Joi.string().alphanum().length(24).required()
 

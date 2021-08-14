@@ -7,14 +7,15 @@ const {
     updateArtFormQuery,
     updateArtFormBody,
     deleteArtFormQuery,
-    getArtFormQuery
+    getOneArtFormQuery
 } = require('../validators/artform');
 
 const {
     addArtForm,
     updateArtForm,
     deleteArtForm,
-    getArtform
+    getAllArtform,
+    getOneArtform
 } = require('../controllers/artform');
 
 router.route('/add')
@@ -26,7 +27,10 @@ router.route('/update')
 router.route('/delete')
 .delete( celebrate({ [Segments.QUERY]: deleteArtFormQuery }), deleteArtForm );
 
+router.route('/all')
+.get( getAllArtform );
+
 router.route('/get')
-.get( celebrate({ [Segments.QUERY]: getArtFormQuery }), getArtform );
+.get( celebrate({ [Segments.QUERY]: getOneArtFormQuery }), getOneArtform );
 
 module.exports = router;

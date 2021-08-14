@@ -24,7 +24,7 @@ exports.deleteArtFormQuery = Joi.object().keys({
 
 });
 
-exports.getArtFormQuery = Joi.object().keys({
+exports.getOneArtFormQuery = Joi.object().keys({
 
     id: Joi.string().alphanum().length(24).required()
 
