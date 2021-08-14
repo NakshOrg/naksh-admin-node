@@ -41,7 +41,7 @@ exports.updateArtForm = asyncHandler(async (req, res, next) => {
     return res.status(200).send({ artform });
 });
 
-// Cannot delete artforms under use
+// !Cannot delete artforms under use
 exports.deleteArtForm = asyncHandler(async (req, res, next) => {
 
     const artform = await Artform.findOneAndDelete({ _id: req.query.id });

@@ -11,7 +11,12 @@ exports.addOrganizationBody = Joi.object().keys({
     email: Joi.string().email(),
     website: Joi.string(),
     facebook: Joi.string(),
-    instagram: Joi.string()
+    instagram: Joi.string(),
+    custom: Joi.array().items(Joi.object().keys({
+        type: Joi.number().equal(0,1,2).required(),
+        name: Joi.string().required(),
+        value: Joi.string().required()
+    }))
 
 });
 
@@ -32,7 +37,12 @@ exports.updateOrganizationBody = Joi.object().keys({
     email: Joi.string().email(),
     website: Joi.string(),
     facebook: Joi.string(),
-    instagram: Joi.string()
+    instagram: Joi.string(),
+    custom: Joi.array().items(Joi.object().keys({
+        type: Joi.number().equal(0,1,2).required(),
+        name: Joi.string().required(),
+        value: Joi.string().required()
+    }))
 
 });
 

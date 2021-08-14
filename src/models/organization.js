@@ -1,5 +1,7 @@
 const { Schema, model } = require('mongoose');
 
+const { customSchema } = require('./custom');
+
 const organizationSchema = new Schema({
 
     image: {
@@ -49,7 +51,9 @@ const organizationSchema = new Schema({
     instagram: {
         type: String,
         trim: true
-    }
+    },
+
+    custom: [ customSchema ]
 
 });
 

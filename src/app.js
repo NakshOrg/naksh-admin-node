@@ -13,6 +13,7 @@ const { errorHandler } = require('./middlewares/errorHandler');
 const wallet = require('./routes/account');
 const artform = require('./routes/artform');
 const organization = require('./routes/organization');
+const file = require('./routes/file');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(contextMiddleware);
 app.use('/api/account', wallet);
 app.use('/api/artform', artform);
 app.use('/api/organization', organization);
+app.use('/api/file', file );
 
 app.use( notFound );
 app.use( errorHandler );

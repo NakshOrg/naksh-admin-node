@@ -4,7 +4,7 @@ const { ErrorResponse } = require('../helpers/error');
 
 const Organization = require('../models/organization');
 
-// Add custom fields
+// !Add custom fields
 exports.addOrganization = asyncHandler(async (req, res, next) => {
 
     const organization = await new Organization(req.body).save();
@@ -23,7 +23,7 @@ exports.updateOrganization = asyncHandler(async (req, res, next) => {
     return res.status(200).send({ organization });
 });
 
-// What happens to artists under deleted organization?
+// !What happens to artists under deleted organization?
 exports.deleteOrganization = asyncHandler(async (req, res, next) => {
 
     const organization = await Organization.findOneAndDelete({ _id: req.query.id });
