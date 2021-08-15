@@ -2,6 +2,8 @@ const { v4: uuid } = require('uuid');
 
 const S3 = require('aws-sdk/clients/s3');
 
+const { logger } = require('../helpers/logger');
+
 const s3 = new S3({
     apiVersion: '2006-03-01',
     region: 'ap-south-1',
@@ -29,6 +31,7 @@ exports.s3PutUrl = async ( module, totalFiles ) => {
         s3Result = await new Promise((resolve, reject) => {
             s3.getSignedUrl('putObject', params, (err, url) => {
                 if(err) {
+                    logger.error(err, "AWS PUT ERROR");
                     resolve({
                         err: err.message
                     });
@@ -60,9 +63,34 @@ exports.s3GetUrl = async ( file ) => {
     return await new Promise((resolve, reject) => {
         s3.getSignedUrl('getObject', params, (err, url) => {
             if(err) {
+                logger.error(err, "AWS GET ERROR");
                 resolve(params.Key);
             } else {
                 resolve(url);
+            }
+        });
+    });
+
+};
+
+exports.s3DeleteMultiple = async ( files ) => {
+
+    return await new Promise((resolve, reject) => {
+        
+        let params = {
+            Bucket: process.env.S3_BUCKET_NAME,
+            Delete: {
+                Objects: files,
+                Quiet: true
+            }
+        };
+
+        s3.deleteObjects(params, (err, data) => {
+            if(err) {
+                logger.error(err, "AWS DELETE ERROR");
+                resolve(err);
+            } else {
+                resolve(data);
             }
         });
     });
