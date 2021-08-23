@@ -2,9 +2,15 @@ const router = require('express').Router();
 
 const { celebrate, Segments } = require('celebrate');
 
-const { accountDetails } = require('../controllers/account');
+const { accountDetails, connectWallet } = require('../controllers/account');
 
-const { accountDetailsQuery } = require('../validators/account');
+const {
+    connectWalletQuery,
+    accountDetailsQuery
+} = require('../validators/account');
+
+router.route('/test')
+.get( celebrate({ [Segments.QUERY]: connectWalletQuery }), connectWallet );
 
 router.route('/details')
 .get( celebrate({ [Segments.QUERY]: accountDetailsQuery }), accountDetails );

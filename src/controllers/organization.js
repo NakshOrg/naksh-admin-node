@@ -4,6 +4,7 @@ const { ErrorResponse } = require('../helpers/error');
 const { getOrganizationImages } = require('../helpers/methods');
 
 const Organization = require('../models/organization');
+const Artist = require('../models/artist');
 
 exports.addOrganization = asyncHandler(async (req, res, next) => {
 
@@ -27,7 +28,6 @@ exports.updateOrganization = asyncHandler(async (req, res, next) => {
     return res.status(200).send({ organization });
 });
 
-// !What happens to artists under deleted organization?
 exports.deleteOrganization = asyncHandler(async (req, res, next) => {
 
     const organization = await Organization.findOneAndDelete({ _id: req.query.id });
@@ -35,6 +35,8 @@ exports.deleteOrganization = asyncHandler(async (req, res, next) => {
     if(!organization) {
         return next(new ErrorResponse(404, "organization not found"));
     }
+
+    await Artist.updateMany({ organization: req.query.id }, { $unset: { organization: '' } });
 
     return res.status(200).send({ organization });
 });

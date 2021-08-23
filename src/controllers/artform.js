@@ -3,6 +3,7 @@ const { asyncHandler } = require('../middlewares/asyncHandler');
 const { ErrorResponse } = require('../helpers/error');
 
 const Artform = require('../models/artform');
+const Artist = require('../models/artist');
 
 exports.addArtForm = asyncHandler(async (req, res, next) => {
 
@@ -10,7 +11,7 @@ exports.addArtForm = asyncHandler(async (req, res, next) => {
 
     for(let i = 0; i < req.body.artforms.length; i++) {
 
-        let artform = await Artform.findOne({ name: req.body.artforms[i] });
+        let artform = await Artform.findOne({ name: { $regex: req.body.artforms[i], $options: "i" } });
         
         if(artform) {
 
@@ -32,6 +33,12 @@ exports.addArtForm = asyncHandler(async (req, res, next) => {
 
 exports.updateArtForm = asyncHandler(async (req, res, next) => {
 
+    const exist = await Artform.findOne({ name: { $regex: req.body.name, $options: "i" } });
+        
+    if(exist) {
+        return next(new ErrorResponse(400, `${req.body.name} already exists`));
+    }
+
     const artform = await Artform.findOneAndUpdate({ _id: req.query.id }, { ...req.body }, { new: true });
 
     if(!artform) {
@@ -41,8 +48,13 @@ exports.updateArtForm = asyncHandler(async (req, res, next) => {
     return res.status(200).send({ artform });
 });
 
-// !Cannot delete artforms under use
 exports.deleteArtForm = asyncHandler(async (req, res, next) => {
+
+    const exist = await Artist.findOne({ artform: req.query.id });
+
+    if(exist) {
+        return next(new ErrorResponse(400, "artform is associated with an artist"));
+    }
 
     const artform = await Artform.findOneAndDelete({ _id: req.query.id });
 
