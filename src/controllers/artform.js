@@ -15,7 +15,7 @@ exports.addArtForm = asyncHandler(async (req, res, next) => {
         
         if(artform) {
 
-            result.push( `${req.body.artforms[i]} already exists` );
+            result.push( { error: `${req.body.artforms[i]} already exists`} );
 
         } else {
 
@@ -24,7 +24,7 @@ exports.addArtForm = asyncHandler(async (req, res, next) => {
                 createdAt: Date.now()
             }).save();
 
-            result.push( `${req.body.artforms[i]} was added` );
+            result.push( { success: `${req.body.artforms[i]} was added`} );
         }
     }
 
@@ -67,9 +67,28 @@ exports.deleteArtForm = asyncHandler(async (req, res, next) => {
 
 exports.getAllArtform = asyncHandler(async (req, res, next) => {
 
-    const matchParams = {};
+    const aggregateParams = [];
 
-    const artforms = await Artform.aggregate().match(matchParams);
+    const artformMatch = {};
+
+    aggregateParams.push({ $match: artformMatch });
+
+    const artistLookup = {
+        from: "artists",
+        localField: "_id",
+        foreignField: "artform",
+        as: "totalArtists"
+    };
+
+    aggregateParams.push({ $lookup: artistLookup });
+
+    const replaceArtist = {
+        totalArtists: { $size: "$totalArtists" }
+    };
+
+    aggregateParams.push({ $addFields: replaceArtist });
+
+    const artforms = await Artform.aggregate(aggregateParams);
 
     return res.status(200).send({ artforms });
 });
