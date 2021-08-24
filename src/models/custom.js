@@ -10,7 +10,15 @@ const customSchema = new Schema({
         type: String
     },
 
-    value: {
+    text: {
+        type: String
+    },
+
+    date: {
+        type: Date
+    },
+
+    file: {
         type: String
     },
 

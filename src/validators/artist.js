@@ -18,10 +18,24 @@ exports.addArtistBody = Joi.object().keys({
     custom: Joi.array().items(Joi.object().keys({
         type: Joi.number().equal(0,1,2).required(),
         name: Joi.string().required(),
-        value: Joi.string().required(),
+        text: Joi.when('type', {
+            is: Joi.equal(0),
+            then: Joi.string().required(),
+            otherwise: Joi.forbidden()
+        }),
+        file: Joi.when('type', {
+            is: Joi.equal(1),
+            then: Joi.string().required(),
+            otherwise: Joi.forbidden()
+        }),
         fileType: Joi.when('type', {
             is: Joi.equal(1),
             then: Joi.string().required(),
+            otherwise: Joi.forbidden()
+        }),
+        date: Joi.when('type', {
+            is: Joi.equal(2),
+            then: Joi.date().required(),
             otherwise: Joi.forbidden()
         })
     }))
@@ -52,10 +66,24 @@ exports.updateArtistBody = Joi.object().keys({
     custom: Joi.array().items(Joi.object().keys({
         type: Joi.number().equal(0,1,2).required(),
         name: Joi.string().required(),
-        value: Joi.string().required(),
+        text: Joi.when('type', {
+            is: Joi.equal(0),
+            then: Joi.string().required(),
+            otherwise: Joi.forbidden()
+        }),
+        file: Joi.when('type', {
+            is: Joi.equal(1),
+            then: Joi.string().required(),
+            otherwise: Joi.forbidden()
+        }),
         fileType: Joi.when('type', {
             is: Joi.equal(1),
             then: Joi.string().required(),
+            otherwise: Joi.forbidden()
+        }),
+        date: Joi.when('type', {
+            is: Joi.equal(2),
+            then: Joi.date().required(),
             otherwise: Joi.forbidden()
         })
     }))
