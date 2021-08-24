@@ -12,6 +12,10 @@ const customSchema = new Schema({
 
     value: {
         type: String
+    },
+
+    fileType: {
+        type: String
     }
 
 });

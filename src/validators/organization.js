@@ -15,7 +15,12 @@ exports.addOrganizationBody = Joi.object().keys({
     custom: Joi.array().items(Joi.object().keys({
         type: Joi.number().equal(0,1,2).required(),
         name: Joi.string().required(),
-        value: Joi.string().required()
+        value: Joi.string().required(),
+        fileType: Joi.when('type', {
+            is: Joi.equal(1),
+            then: Joi.string().required(),
+            otherwise: Joi.forbidden()
+        })
     }))
 
 });
@@ -41,7 +46,12 @@ exports.updateOrganizationBody = Joi.object().keys({
     custom: Joi.array().items(Joi.object().keys({
         type: Joi.number().equal(0,1,2).required(),
         name: Joi.string().required(),
-        value: Joi.string().required()
+        value: Joi.string().required(),
+        fileType: Joi.when('type', {
+            is: Joi.equal(1),
+            then: Joi.string().required(),
+            otherwise: Joi.forbidden()
+        })
     }))
 
 });
