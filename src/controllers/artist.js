@@ -5,6 +5,8 @@ const { getArtistImages } = require('../helpers/methods');
 
 const Artist = require('../models/artist');
 
+const { Types } = require('mongoose');
+
 // ! Wallet data?
 exports.addArtist = asyncHandler(async (req, res, next) => {
 
@@ -28,10 +30,9 @@ exports.updateArtist = asyncHandler(async (req, res, next) => {
     return res.status(200).send({ artist });
 });
 
-// !Verify delete business logic
-exports.deleteArtist = asyncHandler(async (req, res, next) => {
+exports.deactivateArtist = asyncHandler(async (req, res, next) => {
 
-    const artist = await Artist.findOneAndDelete({ _id: req.query.id });
+    const artist = await Artist.findOneAndUpdate({ _id: req.query.id }, { status: 1 }, { new: true });
 
     if(!artist) {
         return next(new ErrorResponse(404, "artist not found"));
@@ -42,9 +43,35 @@ exports.deleteArtist = asyncHandler(async (req, res, next) => {
 
 exports.getAllArtist = asyncHandler(async (req, res, next) => {
 
-    const matchParams = {};
+    const aggregateParams = [];
 
-    const artists = await Artist.aggregate().match(matchParams);
+    const filter = {};
+
+    if(req.query.hasOwnProperty('search')) {
+        filter.name = { $regex: req.query.search, $options: 'gi' }
+    }
+
+    if(req.query.hasOwnProperty('state')) {
+        filter.state = req.query.state
+    }
+
+    if(req.query.hasOwnProperty('status')) {
+        filter.status = parseInt(req.query.status)
+    }
+
+    if(req.query.hasOwnProperty('artform')) {
+        filter.artform = Types.ObjectId(req.query.artform)
+    }
+
+    aggregateParams.push({ $match: filter });
+
+    const $sort = {};
+
+    $sort[req.query.sortBy] = parseInt(req.query.sort);
+
+    aggregateParams.push({ $sort });
+
+    const artists = await Artist.aggregate(aggregateParams);
     
     for(let i = 0; i < artists.length; i++) {
         await getArtistImages( artists[i] );

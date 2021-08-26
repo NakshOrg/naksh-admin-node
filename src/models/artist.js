@@ -69,7 +69,11 @@ const artistSchema = new Schema({
 
     status: {
         type: Number
-    }
+    },
+
+    createdAt: {
+        type: Date
+    },
 
 });
 

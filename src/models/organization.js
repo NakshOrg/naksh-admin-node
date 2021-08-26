@@ -53,6 +53,10 @@ const organizationSchema = new Schema({
         trim: true
     },
 
+    createdAt: {
+        type: Date
+    },
+
     custom: [ customSchema ]
 
 });

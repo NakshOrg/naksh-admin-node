@@ -7,6 +7,7 @@ const {
     updateOrganizationQuery,
     updateOrganizationBody,
     deleteOrganizationQuery,
+    getAllOrganizationQuery,
     getOneOrganizationQuery
 } = require('../validators/organization');
 
@@ -28,7 +29,7 @@ router.route('/delete')
 .delete( celebrate({ [Segments.QUERY]: deleteOrganizationQuery }), deleteOrganization );
 
 router.route('/all')
-.get( getAllOrganization );
+.get( celebrate({ [Segments.QUERY]: getAllOrganizationQuery }), getAllOrganization );
 
 router.route('/get')
 .get( celebrate({ [Segments.QUERY]: getOneOrganizationQuery }), getOneOrganization );

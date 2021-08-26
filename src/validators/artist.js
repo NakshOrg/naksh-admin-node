@@ -90,9 +90,20 @@ exports.updateArtistBody = Joi.object().keys({
 
 });
 
-exports.deleteArtistQuery = Joi.object().keys({
+exports.deactivateArtistQuery = Joi.object().keys({
 
     id: Joi.string().alphanum().length(24).required()
+
+});
+
+exports.getAllArtistQuery = Joi.object().keys({
+
+    sortBy: Joi.equal("createdAt", "name").required(),
+    sort: Joi.equal("1","-1").required(),
+    search: Joi.string(),
+    state: Joi.string(),
+    status: Joi.equal("0","1"),
+    artform: Joi.string().alphanum().length(24)
 
 });
 

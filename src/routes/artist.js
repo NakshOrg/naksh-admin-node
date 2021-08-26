@@ -6,14 +6,14 @@ const {
     addArtistBody,
     updateArtistQuery,
     updateArtistBody,
-    deleteArtistQuery,
+    deactivateArtistQuery,
     getOneArtistQuery
 } = require('../validators/artist');
 
 const {
     addArtist,
     updateArtist,
-    deleteArtist,
+    deactivateArtist,
     getAllArtist,
     getOneArtist
 } = require('../controllers/artist');
@@ -24,8 +24,8 @@ router.route('/add')
 router.route('/update')
 .patch( celebrate({ [Segments.QUERY]: updateArtistQuery, [Segments.BODY]: updateArtistBody }), updateArtist );
 
-router.route('/delete')
-.delete( celebrate({ [Segments.QUERY]: deleteArtistQuery }), deleteArtist );
+router.route('/deactivate')
+.delete( celebrate({ [Segments.QUERY]: deactivateArtistQuery }), deactivateArtist );
 
 router.route('/all')
 .get( getAllArtist );

@@ -8,7 +8,7 @@ const Artist = require('../models/artist');
 
 exports.addOrganization = asyncHandler(async (req, res, next) => {
 
-    const organization = await new Organization(req.body).save();
+    const organization = await new Organization({ ...req.body, createdAt: Date.now() }).save();
 
     await getOrganizationImages( organization );
 
@@ -43,9 +43,27 @@ exports.deleteOrganization = asyncHandler(async (req, res, next) => {
 
 exports.getAllOrganization = asyncHandler(async (req, res, next) => {
 
-    const matchParams = {};
+    const aggregateParams = [];
 
-    const organizations = await Organization.aggregate().match(matchParams);
+    const filter = {};
+
+    if(req.query.hasOwnProperty('search')) {
+        filter.name = { $regex: req.query.search, $options: 'gi' }
+    }
+
+    if(req.query.hasOwnProperty('state')) {
+        filter.state = req.query.state
+    }
+
+    aggregateParams.push({ $match: filter });
+
+    const $sort = {};
+
+    $sort[req.query.sortBy] = parseInt(req.query.sort);
+
+    aggregateParams.push({ $sort });
+
+    const organizations = await Organization.aggregate(aggregateParams);
     
     for(let i = 0; i < organizations.length; i++) {
         await getOrganizationImages( organizations[i] );
