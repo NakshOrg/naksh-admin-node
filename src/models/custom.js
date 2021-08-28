@@ -15,7 +15,7 @@ const customSchema = new Schema({
     },
 
     date: {
-        type: Date
+        type: String
     },
 
     file: {
