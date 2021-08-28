@@ -32,7 +32,7 @@ exports.addOrganizationBody = Joi.object().keys({
         }),
         date: Joi.when('type', {
             is: Joi.equal(2),
-            then: Joi.date().required(),
+            then: Joi.string().required(),
             otherwise: Joi.forbidden()
         })
     }))
@@ -77,7 +77,7 @@ exports.updateOrganizationBody = Joi.object().keys({
         }),
         date: Joi.when('type', {
             is: Joi.equal(2),
-            then: Joi.date().required(),
+            then: Joi.string().required(),
             otherwise: Joi.forbidden()
         })
     }))

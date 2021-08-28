@@ -35,7 +35,7 @@ exports.addArtistBody = Joi.object().keys({
         }),
         date: Joi.when('type', {
             is: Joi.equal(2),
-            then: Joi.date().required(),
+            then: Joi.string().required(),
             otherwise: Joi.forbidden()
         })
     }))
@@ -83,7 +83,7 @@ exports.updateArtistBody = Joi.object().keys({
         }),
         date: Joi.when('type', {
             is: Joi.equal(2),
-            then: Joi.date().required(),
+            then: Joi.string().required(),
             otherwise: Joi.forbidden()
         })
     }))
