@@ -6,14 +6,12 @@ const {
     addArtistBody,
     updateArtistQuery,
     updateArtistBody,
-    deactivateArtistQuery,
     getOneArtistQuery
 } = require('../validators/artist');
 
 const {
     addArtist,
     updateArtist,
-    deactivateArtist,
     getAllArtist,
     getOneArtist
 } = require('../controllers/artist');
