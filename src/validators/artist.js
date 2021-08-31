@@ -99,10 +99,10 @@ exports.deactivateArtistQuery = Joi.object().keys({
 exports.getAllArtistQuery = Joi.object().keys({
 
     sortBy: Joi.equal("createdAt", "name").required(),
-    sort: Joi.equal("1","-1").required(),
+    sort: Joi.number().equal(1,-1).required(),
     search: Joi.string(),
     state: Joi.string(),
-    status: Joi.equal("0","1"),
+    status: Joi.number().equal(0, 1),
     artform: Joi.string().alphanum().length(24)
 
 });
