@@ -37,19 +37,19 @@ exports.getAllArtist = asyncHandler(async (req, res, next) => {
     const filter = {};
 
     if(req.query.hasOwnProperty('search')) {
-        filter.name = { $regex: req.query.search, $options: 'gi' }
+        filter.name = { $regex: req.query.search, $options: 'gi' };
     }
 
     if(req.query.hasOwnProperty('state')) {
-        filter.state = req.query.state
+        filter.state = req.query.state;
     }
 
     if(req.query.hasOwnProperty('status')) {
-        filter.status = parseInt(req.query.status)
+        filter.status = parseInt(req.query.status);
     }
 
     if(req.query.hasOwnProperty('artform')) {
-        filter.artform = Types.ObjectId(req.query.artform)
+        filter.artform = Types.ObjectId(req.query.artform);
     }
 
     aggregateParams.push({ $match: filter });

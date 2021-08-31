@@ -6,6 +6,7 @@ const {
     addArtistBody,
     updateArtistQuery,
     updateArtistBody,
+    getAllArtistQuery,
     getOneArtistQuery
 } = require('../validators/artist');
 
@@ -23,7 +24,7 @@ router.route('/update')
 .patch( celebrate({ [Segments.QUERY]: updateArtistQuery, [Segments.BODY]: updateArtistBody }), updateArtist );
 
 router.route('/all')
-.get( getAllArtist );
+.get( celebrate({ [Segments.QUERY]: getAllArtistQuery }), getAllArtist );
 
 router.route('/get')
 .get( celebrate({ [Segments.QUERY]: getOneArtistQuery }), getOneArtist );
