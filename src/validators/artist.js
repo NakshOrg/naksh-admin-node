@@ -63,6 +63,7 @@ exports.updateArtistBody = Joi.object().keys({
     website: Joi.string(),
     facebook: Joi.string(),
     instagram: Joi.string(),
+    status: Joi.number().equal(0, 1),
     custom: Joi.array().items(Joi.object().keys({
         type: Joi.number().equal(0,1,2).required(),
         name: Joi.string().required(),
