@@ -24,9 +24,6 @@ router.route('/add')
 router.route('/update')
 .patch( celebrate({ [Segments.QUERY]: updateArtistQuery, [Segments.BODY]: updateArtistBody }), updateArtist );
 
-router.route('/deactivate')
-.delete( celebrate({ [Segments.QUERY]: deactivateArtistQuery }), deactivateArtist );
-
 router.route('/all')
 .get( getAllArtist );
 

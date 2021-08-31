@@ -30,17 +30,6 @@ exports.updateArtist = asyncHandler(async (req, res, next) => {
     return res.status(200).send({ artist });
 });
 
-exports.deactivateArtist = asyncHandler(async (req, res, next) => {
-
-    const artist = await Artist.findOneAndUpdate({ _id: req.query.id }, { status: 1 }, { new: true });
-
-    if(!artist) {
-        return next(new ErrorResponse(404, "artist not found"));
-    }
-
-    return res.status(200).send({ artist });
-});
-
 exports.getAllArtist = asyncHandler(async (req, res, next) => {
 
     const aggregateParams = [];
