@@ -82,7 +82,17 @@ exports.getAllArtist = asyncHandler(async (req, res, next) => {
 
 exports.getOneArtist = asyncHandler(async (req, res, next) => {
 
-    const artist = await Artist.findOne({ _id: req.query.id });
+    const artformPopulate = {
+        path: "artform",
+        model: "Artform"
+    };
+
+    const organizationPopulate = {
+        path: "organization",
+        model: "Organization"
+    };
+
+    const artist = await Artist.findOne({ _id: req.query.id }).populate(artformPopulate).populate(organizationPopulate);
 
     if(!artist) {
         return next(new ErrorResponse(404, "artist not found"));

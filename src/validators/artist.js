@@ -91,12 +91,6 @@ exports.updateArtistBody = Joi.object().keys({
 
 });
 
-exports.deactivateArtistQuery = Joi.object().keys({
-
-    id: Joi.string().alphanum().length(24).required()
-
-});
-
 exports.getAllArtistQuery = Joi.object().keys({
 
     sortBy: Joi.equal("createdAt", "name").required(),
