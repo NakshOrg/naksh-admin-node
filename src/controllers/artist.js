@@ -10,7 +10,7 @@ const { Types } = require('mongoose');
 // ! Wallet data?
 exports.addArtist = asyncHandler(async (req, res, next) => {
 
-    const artist = await new Artist(req.body).save();
+    const artist = await new Artist({ ...req.body, status: 0, createdAt: Date.now() }).save();
 
     await getArtistImages( artist );
 
