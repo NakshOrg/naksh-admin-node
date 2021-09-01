@@ -63,7 +63,7 @@ exports.getAllOrganization = asyncHandler(async (req, res, next) => {
 
     aggregateParams.push({ $sort });
 
-    const organizations = await Organization.aggregate(aggregateParams);
+    const organizations = await Organization.aggregate(aggregateParams).collation({locale: "en"});
     
     for(let i = 0; i < organizations.length; i++) {
         await getOrganizationImages( organizations[i] );

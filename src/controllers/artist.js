@@ -60,7 +60,7 @@ exports.getAllArtist = asyncHandler(async (req, res, next) => {
 
     aggregateParams.push({ $sort });
 
-    const artists = await Artist.aggregate(aggregateParams);
+    const artists = await Artist.aggregate(aggregateParams).collation({locale: "en"});
     
     for(let i = 0; i < artists.length; i++) {
         await getArtistImages( artists[i] );

@@ -88,7 +88,7 @@ exports.getAllArtform = asyncHandler(async (req, res, next) => {
 
     aggregateParams.push({ $addFields: replaceArtist });
 
-    const artforms = await Artform.aggregate(aggregateParams);
+    const artforms = await Artform.aggregate(aggregateParams).collation({locale: "en"});
 
     return res.status(200).send({ artforms });
 });
