@@ -1,7 +1,9 @@
 const { Joi } = require('celebrate');
 
-const alphaNumSpaceRegex = /^[a-zA-Z0-9 ]+$/;
-const alphaNumSpaceRegexName = 'alphabets, numbers and space only';
+const {
+    alphaNumSpaceRegex,
+    alphaNumSpaceRegexName
+} = require('./validatorOptions');
 
 exports.addArtFormBody = Joi.object().keys({
 

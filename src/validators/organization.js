@@ -1,23 +1,18 @@
 const { Joi } = require('celebrate');
 
-const alphaNumSpaceRegex = /^[a-zA-Z0-9 ]+$/;
-const alphaNumSpaceRegexName = 'alphabets, numbers and space only';
-
-const phoneNumberRegex = /^[0-9]{10}$/;
-const phoneNumberRegexName = '10 digit number only';
-
-const websitelRegex = /^.+\..+$/;
-const websiteRegexName = 'valid website only';
-
-const facebookRegex = /^https:\/\/(www\.|m\.)?facebook\.com\/.+$/;
-const facebookRegexName = 'https://www.facebook.com/ or https://m.facebook.com/ or https://facebook.com/';
-
-const instagramRegex = /^https:\/\/(www\.|m\.)?instagram\.com\/.+$/;
-const instagramRegexName = 'https://www.instagram.com/ or https://m.instagram.com/ or https://instagram.com/';
-
-const emailOptions = {
-    maxDomainSegments: 2
-};
+const {
+    alphaNumSpaceRegex,
+    alphaNumSpaceRegexName,
+    phoneNumberRegex,
+    phoneNumberRegexName,
+    websiteRegex,
+    websiteRegexName,
+    facebookRegex,
+    facebookRegexName,
+    instagramRegex,
+    instagramRegexName,
+    emailOptions
+} = require('./validatorOptions');
 
 exports.addOrganizationBody = Joi.object().keys({
 
@@ -28,9 +23,9 @@ exports.addOrganizationBody = Joi.object().keys({
     city: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     phone: Joi.string().pattern(phoneNumberRegex, phoneNumberRegexName),
     email: Joi.string().email(emailOptions),
-    website: Joi.string(),
-    facebook: Joi.string(),
-    instagram: Joi.string(),
+    website: Joi.string().pattern(websiteRegex, websiteRegexName),
+    facebook: Joi.string().pattern(facebookRegex, facebookRegexName),
+    instagram: Joi.string().pattern(instagramRegex, instagramRegexName),
     custom: Joi.array().items(Joi.object().keys({
         type: Joi.number().equal(0,1,2).required(),
         name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName).required(),
@@ -73,9 +68,9 @@ exports.updateOrganizationBody = Joi.object().keys({
     city: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     phone: Joi.string().pattern(phoneNumberRegex, phoneNumberRegexName),
     email: Joi.string().email(emailOptions),
-    website: Joi.string(),
-    facebook: Joi.string(),
-    instagram: Joi.string(),
+    website: Joi.string().pattern(websiteRegex, websiteRegexName),
+    facebook: Joi.string().pattern(facebookRegex, facebookRegexName),
+    instagram: Joi.string().pattern(instagramRegex, instagramRegexName),
     custom: Joi.array().items(Joi.object().keys({
         type: Joi.number().equal(0,1,2).required(),
         name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName).required(),

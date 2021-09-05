@@ -22,21 +22,21 @@ exports.errorHandler = async (err, req, res, next) => {
         case 401:
 
             logger.debug(err, err.message);
-            return res.status(err.code).clearCookie('token').send({ error: err.message });
+            return res.status(err.code).clearCookie('token').send({ code: err.code, error: err.message });
 
         break;
 
         case 404:
 
             logger.debug(err, err.message);
-            return res.status(err.code).send({ error: err.message });
+            return res.status(err.code).send({ code: err.code, error: err.message });
 
         break;
     
         default:
 
             logger.error(err, err.message);
-            return res.status(500).send({ error: err.message });
+            return res.status(500).send({ code: err.code, error: err.message });
         
         break;
 
