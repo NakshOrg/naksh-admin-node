@@ -8,7 +8,7 @@ exports.getOrganizationImages = async ( organization ) => {
 
     for(let i = 0; i < organization.custom.length; i++) {
         if( organization.custom[i].type == 1 ) {
-            organization.custom[i].file = await s3GetUrl(organization.custom[i].file);
+            organization.custom[i].fileUrl = await s3GetUrl(organization.custom[i].fileKey);
         }
     }
 }
@@ -21,7 +21,7 @@ exports.getArtistImages = async ( artist ) => {
 
     for(let i = 0; i < artist.custom.length; i++) {
         if( artist.custom[i].type == 1 ) {
-            artist.custom[i].file = await s3GetUrl(artist.custom[i].file);
+            artist.custom[i].fileUrl = await s3GetUrl(artist.custom[i].fileKey);
         }
     }
 }

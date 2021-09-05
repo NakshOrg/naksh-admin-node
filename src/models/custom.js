@@ -7,23 +7,33 @@ const customSchema = new Schema({
     },
 
     name: {
-        type: String
+        type: String,
+        trim: true
     },
 
     text: {
-        type: String
+        type: String,
+        trim: true
     },
 
     date: {
-        type: String
+        type: String,
+        trim: true
     },
 
-    file: {
-        type: String
+    fileKey: {
+        type: String,
+        trim: true
+    },
+
+    fileUrl: {
+        type: String,
+        trim: true
     },
 
     fileType: {
-        type: String
+        type: String,
+        trim: true
     }
 
 });

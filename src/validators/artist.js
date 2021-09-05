@@ -1,14 +1,16 @@
 const { Joi } = require('celebrate');
 
+const alphaNumSpaceRegex = /^[a-zA-Z0-9 ]+$/;
+
 exports.addArtistBody = Joi.object().keys({
 
     image: Joi.string(),
-    name: Joi.string().required(),
+    name: Joi.string().pattern(alphaNumSpaceRegex, 'alphabets, numbers or space').required(),
     description: Joi.string(),
     artform: Joi.string().alphanum().length(24),
     organization: Joi.string().alphanum().length(24),
-    state: Joi.string(),
-    city: Joi.string(),
+    state: Joi.string().pattern(alphaNumSpaceRegex, 'alphabets, numbers or space'),
+    city: Joi.string().pattern(alphaNumSpaceRegex, 'alphabets, numbers or space'),
     phone: Joi.string().length(10).regex(/[0-9]/),
     email: Joi.string().email(),
     wallet: Joi.string().required(),
@@ -17,13 +19,13 @@ exports.addArtistBody = Joi.object().keys({
     instagram: Joi.string(),
     custom: Joi.array().items(Joi.object().keys({
         type: Joi.number().equal(0,1,2).required(),
-        name: Joi.string().required(),
+        name: Joi.string().pattern(alphaNumSpaceRegex, 'alphabets, numbers or space').required(),
         text: Joi.when('type', {
             is: Joi.equal(0),
             then: Joi.string().required(),
             otherwise: Joi.forbidden()
         }),
-        file: Joi.when('type', {
+        fileKey: Joi.when('type', {
             is: Joi.equal(1),
             then: Joi.string().required(),
             otherwise: Joi.forbidden()
@@ -51,12 +53,12 @@ exports.updateArtistQuery = Joi.object().keys({
 exports.updateArtistBody = Joi.object().keys({
 
     image: Joi.string(),
-    name: Joi.string(),
+    name: Joi.string().pattern(alphaNumSpaceRegex, 'alphabets, numbers or space'),
     description: Joi.string(),
     artform: Joi.string().alphanum().length(24),
     organization: Joi.string().alphanum().length(24),
-    state: Joi.string(),
-    city: Joi.string(),
+    state: Joi.string().pattern(alphaNumSpaceRegex, 'alphabets, numbers or space'),
+    city: Joi.string().pattern(alphaNumSpaceRegex, 'alphabets, numbers or space'),
     phone: Joi.string().length(10).regex(/[0-9]/),
     email: Joi.string().email(),
     wallet: Joi.string(),
@@ -66,13 +68,13 @@ exports.updateArtistBody = Joi.object().keys({
     status: Joi.number().equal(0, 1),
     custom: Joi.array().items(Joi.object().keys({
         type: Joi.number().equal(0,1,2).required(),
-        name: Joi.string().required(),
+        name: Joi.string().pattern(alphaNumSpaceRegex, 'alphabets, numbers or space').required(),
         text: Joi.when('type', {
             is: Joi.equal(0),
             then: Joi.string().required(),
             otherwise: Joi.forbidden()
         }),
-        file: Joi.when('type', {
+        fileKey: Joi.when('type', {
             is: Joi.equal(1),
             then: Joi.string().required(),
             otherwise: Joi.forbidden()
@@ -93,10 +95,10 @@ exports.updateArtistBody = Joi.object().keys({
 
 exports.getAllArtistQuery = Joi.object().keys({
 
-    sortBy: Joi.equal("createdAt", "name").required(),
+    sortBy: Joi.string().equal("createdAt", "name").required(),
     sort: Joi.number().equal(1,-1).required(),
-    search: Joi.string(),
-    state: Joi.string(),
+    search: Joi.string().pattern(alphaNumSpaceRegex, 'alphabets, numbers or space'),
+    state: Joi.string().pattern(alphaNumSpaceRegex, 'alphabets, numbers or space'),
     status: Joi.number().equal(0, 1),
     artform: Joi.string().alphanum().length(24)
 

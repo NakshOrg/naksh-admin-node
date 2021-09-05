@@ -1,8 +1,11 @@
 const { Joi } = require('celebrate');
 
+const alphaNumSpaceRegex = /^[a-zA-Z0-9 ]+$/;
+const alphaNumSpaceRegexName = 'alphabets, numbers and space only';
+
 exports.addArtFormBody = Joi.object().keys({
 
-    artforms: Joi.array().items(Joi.string()).min(1).required()
+    artforms: Joi.array().items(Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName)).min(1).required()
 
 });
 

@@ -6,12 +6,13 @@ const mintbase = require('mintbase');
 
 // Near
 const { connect, KeyPair, keyStores, utils } = require("near-api-js");
+/*
 const path = require("path");
 const homedir = require("os").homedir();
 const CREDENTIALS_DIR = ".near-credentials";
 const credentialsPath = path.join(homedir, CREDENTIALS_DIR);
 const keyStore = new keyStores.UnencryptedFileSystemKeyStore(credentialsPath);
-
+*/
 exports.connectWallet = asyncHandler( async (req, res, next) => {
 
     /*
@@ -62,11 +63,24 @@ exports.connectWallet = asyncHandler( async (req, res, next) => {
 
 exports.accountDetails = asyncHandler( async (req, res, next) => {
 
-    const credentialsPath = path.join(homedir, CREDENTIALS_DIR);
-    const keyStore = new keyStores.UnencryptedFileSystemKeyStore(credentialsPath);
+
+    const privateKey = 'first entry swap execute erosion concert mango umbrella now can vehicle tomato';
+    const keyPair = utils.KeyPair.fromString(privateKey);
+
+    const keyStore = new keyStores.InMemoryKeyStore();
+    keyStore.setKey('testnet', 'abhishekvenunthan.testnet', keyPair);
+
+    const config = {
+        networkId: "testnet",
+        keyStore,
+        nodeUrl: "https://rpc.testnet.near.org",
+        walletUrl: "https://wallet.testnet.near.org",
+        helperUrl: "https://helper.testnet.near.org",
+        explorerUrl: "https://explorer.testnet.near.org",
+    };
+    
     const near = await connect({ ...config, keyStore });
 
-    // create wallet connection
     const wallet = new WalletConnection(near);
 
     return res.status(200).send({ wallet });
