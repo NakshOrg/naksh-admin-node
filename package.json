@@ -37,6 +37,7 @@
     "mongoose": "^5.13.3",
     "morgan": "^1.10.0",
     "near-api-js": "^0.42.0",
+    "near-seed-phrase": "^0.2.0",
     "pino": "^6.13.0",
     "uuid": "^8.3.2"
   }
