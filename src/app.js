@@ -26,11 +26,11 @@ app.use(helmet());
 app.use(cookieParser());
 app.use(contextMiddleware);
 
-app.use('/api/account', wallet);
-app.use('/api/artform', artform);
-app.use('/api/organization', organization);
-app.use('/api/artist', artist);
-app.use('/api/file', file );
+app.use('/admin/account', wallet);
+app.use('/admin/artform', artform);
+app.use('/admin/organization', organization);
+app.use('/admin/artist', artist);
+app.use('/admin/file', file );
 
 app.use( notFound );
 app.use( errorHandler );
