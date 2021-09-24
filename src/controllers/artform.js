@@ -11,7 +11,7 @@ exports.addArtForm = asyncHandler(async (req, res, next) => {
 
     for(let i = 0; i < req.body.artforms.length; i++) {
 
-        let artform = await Artform.findOne({ name: { $regex: req.body.artforms[i], $options: "i" } });
+        let artform = await Artform.findOne({ name: { $regex: `^${req.body.artforms[i]}$`, $options: "i" } });
         
         if(artform) {
 
@@ -33,7 +33,7 @@ exports.addArtForm = asyncHandler(async (req, res, next) => {
 
 exports.updateArtForm = asyncHandler(async (req, res, next) => {
 
-    const exist = await Artform.findOne({ name: { $regex: req.body.name, $options: "i" } });
+    const exist = await Artform.findOne({ name: { $regex: `^${req.body.name}$`, $options: "i" } });
         
     if(exist) {
         return next(new ErrorResponse(400, `${req.body.name} already exists`));

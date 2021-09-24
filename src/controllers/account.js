@@ -2,11 +2,15 @@ const { asyncHandler } = require('../middlewares/asyncHandler');
 
 const { ErrorResponse } = require('../helpers/error');
 
-const mintbase = require('mintbase');
+const { Wallet, Chain, Network } = require('mintbase');
 
-const { connect, keyStores, utils } = require("near-api-js");
+const { connect, keyStores, utils, Account } = require("near-api-js");
 
 const { parseSeedPhrase } = require('near-seed-phrase');
+
+const fs = require('fs');
+
+const path = require('path');
 
 exports.connectWallet = asyncHandler( async (req, res, next) => {
 
@@ -16,13 +20,14 @@ exports.connectWallet = asyncHandler( async (req, res, next) => {
 
 exports.accountDetails = asyncHandler( async (req, res, next) => {
 
+    // const parsedSeedPhrase = parseSeedPhrase(process.env.SEEDPHRASE);
+    // const keyPair = utils.KeyPair.fromString(parsedSeedPhrase.secretKey);
 
-    const parsedSeedPhrase = parseSeedPhrase('first entry swap execute erosion concert mango umbrella now can vehicle tomato');
+    const CREDENTIALS_DIR = "../../.near-credentials";
+    const credentialsPath = path.join(__dirname, CREDENTIALS_DIR);
+    const keyStore = new keyStores.UnencryptedFileSystemKeyStore(credentialsPath);
 
-    const keyPair = utils.KeyPair.fromString(parsedSeedPhrase.secretKey);
-
-    const keyStore = new keyStores.InMemoryKeyStore();
-    keyStore.setKey('testnet', 'abhishekvenunthan.testnet', keyPair);
+    // keyStore.setKey('testnet', 'abhishekvenunathan.testnet', keyPair);
 
     const config = {
         networkId: "testnet",
@@ -37,16 +42,20 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     const account = await near.account("abhishekvenunathan.testnet");
 
-    const response = await near.connection.provider.query({
-        request_type: "view_code",
-        finality: "final",
-        account_id: "abhishekvenunathan.testnet",
-      });
+    const data = await account.sendMoney("abhishekvenunathan.testnet", 100);
 
-    const yoctoNearBalance = await account.getAccountBalance();
+    // const yoctoNearBalance = await account.getAccountBalance();
+    
+    // const nearBalance = utils.format.formatNearAmount(yoctoNearBalance.available);
+    
+    // ! SMART CONTRACT
+    // const data = fs.readFileSync(path.join(__dirname, "/nft_simple.wasm"));
+    // const txs = await account.deployContract(data);
+    // const data = await account.viewFunction(
+    //     "abhishekvenunathan.testnet",
+    //     "get_accounts"
+    // );
 
-    const nearBalance = utils.format.formatNearAmount(yoctoNearBalance.available);
-
-    return res.status(200).send({ account, nearBalance, response });
+    return res.status(200).send({ data });
 
 });

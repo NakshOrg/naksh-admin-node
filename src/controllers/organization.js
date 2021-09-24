@@ -1,7 +1,9 @@
 const { asyncHandler } = require('../middlewares/asyncHandler');
 
+const { Types } = require('mongoose');
+
 const { ErrorResponse } = require('../helpers/error');
-const { getOrganizationImages } = require('../helpers/methods');
+const { getOrganizationImages, getArtistImages } = require('../helpers/methods');
 
 const Organization = require('../models/organization');
 const Artist = require('../models/artist');
@@ -74,13 +76,34 @@ exports.getAllOrganization = asyncHandler(async (req, res, next) => {
 
 exports.getOneOrganization = asyncHandler(async (req, res, next) => {
 
-    const organization = await Organization.findOne({ _id: req.query.id });
+    const aggregateParams = [];
+
+    const organizationMatch = { _id: Types.ObjectId(req.query.id) };
+
+    aggregateParams.push({ $match: organizationMatch });
+
+    const artistLookup = {
+        from: "artists",
+        localField: "_id",
+        foreignField: "organization",
+        as: "artists"
+    };
+
+    aggregateParams.push({ $lookup: artistLookup });
+
+    const organizations = await Organization.aggregate(aggregateParams).collation({locale: "en"});
+
+    let organization = organizations.length ? organizations[0] : undefined;
 
     if(!organization) {
         return next(new ErrorResponse(404, "organization not found"));
     }
 
     await getOrganizationImages( organization );
+
+    for(let i = 0; i < organization.artists.length; i++) {
+        await getArtistImages( organization.artists[i] );
+    }
 
     return res.status(200).send({ organization });
 });

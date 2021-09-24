@@ -4,7 +4,7 @@ exports.alphaNumSpaceRegexName = 'alphabets, numbers and space only';
 exports.phoneNumberRegex = /^[0-9]{10}$/;
 exports.phoneNumberRegexName = '10 digit number only';
 
-exports.walletRegex = /^.+\.testnet$/;
+exports.walletRegex = /^.+\.(near|testnet)$/;
 exports.walletRegexName = 'NEAR testnet';
 
 exports.websiteRegex = /^.+\..+$/;
