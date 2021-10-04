@@ -20,14 +20,13 @@ exports.connectWallet = asyncHandler( async (req, res, next) => {
 
 exports.accountDetails = asyncHandler( async (req, res, next) => {
 
-    // const parsedSeedPhrase = parseSeedPhrase(process.env.SEEDPHRASE);
-    // const keyPair = utils.KeyPair.fromString(parsedSeedPhrase.secretKey);
-
     const CREDENTIALS_DIR = "../../.near-credentials";
     const credentialsPath = path.join(__dirname, CREDENTIALS_DIR);
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(credentialsPath);
 
-    // keyStore.setKey('testnet', 'abhishekvenunathan.testnet', keyPair);
+    // const parsedSeedPhrase = parseSeedPhrase(process.env.SEEDPHRASE);
+    // const keyPair = utils.KeyPair.fromString(parsedSeedPhrase.secretKey);
+    // await keyStore.setKey('testnet', 'abhishekvenunathan.testnet', keyPair);
 
     const config = {
         networkId: "testnet",
@@ -42,20 +41,52 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     const account = await near.account("abhishekvenunathan.testnet");
 
-    const data = await account.sendMoney("abhishekvenunathan.testnet", 100);
+    // const data = await account.sendMoney("abhishekvenunathan.testnet", 100);
 
     // const yoctoNearBalance = await account.getAccountBalance();
     
     // const nearBalance = utils.format.formatNearAmount(yoctoNearBalance.available);
     
     // ! SMART CONTRACT
-    // const data = fs.readFileSync(path.join(__dirname, "/nft_simple.wasm"));
-    // const txs = await account.deployContract(data);
-    // const data = await account.viewFunction(
-    //     "abhishekvenunathan.testnet",
-    //     "get_accounts"
+    const data = fs.readFileSync(path.join(__dirname, "../../main.wasm"));
+    const txs = await account.deployContract(data);
+
+    // const metadata = { 
+    //     media: "https://miro.medium.com/max/1400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg",
+    //     issued_at: Date.now().toString()
+    // };
+    // const gas = 200000000000000;
+    // const attachedDeposit = utils.format.parseNearAmount("0.1");
+    // const perpetual_royalties = {
+    //     "abhishekvenunathan.testnet": 1000
+    // };
+
+    // const FunctionCallOptions = {
+    //     contractId: 'abhishekvenunathan.testnet',
+    //     methodName: 'nft_mint',
+    //     args: {
+    //         token_id: 'abhishek-' + Date.now(),
+    //         metadata,
+    //         perpetual_royalties
+    //     },
+    //     gas,
+    //     attachedDeposit
+    // };
+
+    // const data = await account.functionCall(FunctionCallOptions);
+
+    // const data = await account.functionCall(
+    //     'abhishekvenunathan.testnet',
+    //     'nft_mint',
+    //     {
+    //         token_id: 'abhishek-' + Date.now(),
+    //         metadata,
+    //         perpetual_royalties
+    //     },
+    //     gas,
+    //     attachedDeposit
     // );
 
-    return res.status(200).send({ data });
+    return res.status(200).send({ txs });
 
 });
