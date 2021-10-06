@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const { celebrate, Segments } = require('celebrate');
 
-const { accountDetails, connectWallet } = require('../controllers/account');
+const { accountDetails, connectWallet, testPinata } = require('../controllers/account');
 
 const {
     connectWalletQuery,
@@ -14,5 +14,8 @@ router.route('/test')
 
 router.route('/details')
 .get( celebrate({ [Segments.QUERY]: accountDetailsQuery }), accountDetails );
+
+router.route('/pinata')
+.get( testPinata );
 
 module.exports = router;

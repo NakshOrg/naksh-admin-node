@@ -12,6 +12,9 @@ const fs = require('fs');
 
 const path = require('path');
 
+const pinataSDK = require('@pinata/sdk');
+const pinata = pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECRET);
+
 exports.connectWallet = asyncHandler( async (req, res, next) => {
 
     return res.status(200).send({ data: "Something" });
@@ -47,10 +50,11 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     
     // const nearBalance = utils.format.formatNearAmount(yoctoNearBalance.available);
     
-    // ! SMART CONTRACT
-    const data = fs.readFileSync(path.join(__dirname, "../../main.wasm"));
-    const txs = await account.deployContract(data);
+    // SMART CONTRACT
+    // const data = fs.readFileSync(path.join(__dirname, "../../main.wasm"));
+    // const txs = await account.deployContract(data);
 
+    // MINTING FUNCTION
     // const metadata = { 
     //     media: "https://miro.medium.com/max/1400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg",
     //     issued_at: Date.now().toString()
@@ -73,7 +77,23 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     //     attachedDeposit
     // };
 
-    // const data = await account.functionCall(FunctionCallOptions);
+    // INIT FUNCTION
+    const metadata = {
+        spec: "nft-1.0.0",
+        name: "Naksh",
+        symbol: "NAKSH"
+    };
+
+    const FunctionCallOptions = {
+        contractId: 'abhishekvenunathan.testnet',
+        methodName: 'new',
+        args: {
+            owner_id: 'abhishekvenunathan.testnet',
+            metadata
+        }
+    };
+
+    const data = await account.functionCall(FunctionCallOptions);
 
     // const data = await account.functionCall(
     //     'abhishekvenunathan.testnet',
@@ -87,6 +107,32 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     //     attachedDeposit
     // );
 
-    return res.status(200).send({ txs });
+    return res.status(200).send({ data });
+
+});
+
+exports.testPinata = asyncHandler( async (req, res, next) => {
+
+    const auth = await pinata.testAuthentication();
+
+    const readableStreamForFile = fs.createReadStream(path.join(__dirname, "../../raccoon.jpg"));
+
+    const options = {
+        pinataMetadata: {
+            name: "raccoon funny",
+            keyvalues: {
+                customKey: 'customValue',
+                issuedAt: Date.now().toString(),
+                issuedBy: "Abhishek"
+            }
+        },
+        pinataOptions: {
+            cidVersion: 0
+        }
+    };
+
+    const upload = await pinata.pinFileToIPFS(readableStreamForFile, options);
+    
+    return res.status(200).send({ auth, upload });
 
 });

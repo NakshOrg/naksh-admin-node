@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/NakshOrg/naksh-admin-node#readme",
   "dependencies": {
+    "@pinata/sdk": "^1.1.23",
     "aws-sdk": "^2.958.0",
     "celebrate": "^15.0.0",
     "compression": "^1.7.4",
