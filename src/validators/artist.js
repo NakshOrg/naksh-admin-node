@@ -18,7 +18,7 @@ const {
 
 exports.addArtistBody = Joi.object().keys({
 
-    image: Joi.string(),
+    image: Joi.string().allow(null),
     name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName).required(),
     description: Joi.string(),
     artform: Joi.string().alphanum().length(24),
@@ -66,7 +66,7 @@ exports.updateArtistQuery = Joi.object().keys({
 
 exports.updateArtistBody = Joi.object().keys({
 
-    image: Joi.string(),
+    image: Joi.string().allow(null),
     name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     description: Joi.string(),
     artform: Joi.string().alphanum().length(24),

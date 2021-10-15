@@ -54,58 +54,53 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // const data = fs.readFileSync(path.join(__dirname, "../../main.wasm"));
     // const txs = await account.deployContract(data);
 
-    // MINTING FUNCTION
-    // const metadata = { 
-    //     media: "https://miro.medium.com/max/1400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg",
-    //     issued_at: Date.now().toString()
+    // 1 - INIT FUNCTION
+    // const metadata = {
+    //     spec: "nft-1",
+    //     name: "Naksh",
+    //     symbol: "TNFT"
     // };
-    // const gas = 200000000000000;
-    // const attachedDeposit = utils.format.parseNearAmount("0.1");
-    // const perpetual_royalties = {
-    //     "abhishekvenunathan.testnet": 1000
+
+    // const supply_cap_by_type = {
+    //     test: '1000000'
     // };
 
     // const FunctionCallOptions = {
     //     contractId: 'abhishekvenunathan.testnet',
-    //     methodName: 'nft_mint',
+    //     methodName: 'new',
     //     args: {
-    //         token_id: 'abhishek-' + Date.now(),
+    //         owner_id: 'abhishekvenunathan.testnet',
     //         metadata,
-    //         perpetual_royalties
-    //     },
-    //     gas,
-    //     attachedDeposit
+    //         supply_cap_by_type
+    //     }
     // };
 
-    // INIT FUNCTION
-    const metadata = {
-        spec: "nft-1.0.0",
-        name: "Naksh",
-        symbol: "NAKSH"
+    // 2 - MINTING FUNCTION
+    const metadata = { 
+        media: "https://miro.medium.com/max/1400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg",
+        issued_at: Date.now().toString()
+    };
+    const gas = 200000000000000;
+    const attachedDeposit = utils.format.parseNearAmount("0.1");
+    const perpetual_royalties = {
+        "abhishekvenunathan.testnet": 1000
     };
 
     const FunctionCallOptions = {
         contractId: 'abhishekvenunathan.testnet',
-        methodName: 'new',
+        methodName: 'nft_mint',
         args: {
-            owner_id: 'abhishekvenunathan.testnet',
-            metadata
-        }
+            token_id: 'abhishek-' + Date.now(),
+            metadata,
+            perpetual_royalties
+        },
+        gas,
+        attachedDeposit
     };
 
-    const data = await account.functionCall(FunctionCallOptions);
+    // 3 - TRANSFER NFT FUNCTION
 
-    // const data = await account.functionCall(
-    //     'abhishekvenunathan.testnet',
-    //     'nft_mint',
-    //     {
-    //         token_id: 'abhishek-' + Date.now(),
-    //         metadata,
-    //         perpetual_royalties
-    //     },
-    //     gas,
-    //     attachedDeposit
-    // );
+    const data = await account.functionCall(FunctionCallOptions);
 
     return res.status(200).send({ data });
 
@@ -119,11 +114,11 @@ exports.testPinata = asyncHandler( async (req, res, next) => {
 
     const options = {
         pinataMetadata: {
-            name: "raccoon funny",
+            name: "abhi",
             keyvalues: {
                 customKey: 'customValue',
                 issuedAt: Date.now().toString(),
-                issuedBy: "Abhishek"
+                issuedBy: "naksh"
             }
         },
         pinataOptions: {

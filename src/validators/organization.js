@@ -16,7 +16,7 @@ const {
 
 exports.addOrganizationBody = Joi.object().keys({
 
-    image: Joi.string(),
+    image: Joi.string().allow(''),
     name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName).required(),
     description: Joi.string(),
     state: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
@@ -61,7 +61,7 @@ exports.updateOrganizationQuery = Joi.object().keys({
 
 exports.updateOrganizationBody = Joi.object().keys({
 
-    image: Joi.string(),
+    image: Joi.string().allow(''),
     name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     description: Joi.string(),
     state: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),

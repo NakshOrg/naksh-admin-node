@@ -2,7 +2,7 @@ const { s3GetUrl } = require('../helpers/file');
 
 exports.getOrganizationImages = async ( organization ) => {
 
-    if( organization.image ) {
+    if( organization.image && organization.image != null ) {
         organization.image = await s3GetUrl(organization.image);
     }
 
@@ -15,7 +15,7 @@ exports.getOrganizationImages = async ( organization ) => {
 
 exports.getArtistImages = async ( artist ) => {
 
-    if( artist.image ) {
+    if( artist.image && artist.image != null ) {
         artist.image = await s3GetUrl(artist.image);
     }
 
