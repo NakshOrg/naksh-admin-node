@@ -11,13 +11,14 @@ const {
 } = require('../controllers/account');
 
 const {
+    loginBody,
     verifyOtpBody,
     connectWalletQuery,
     accountDetailsQuery
 } = require('../validators/account');
 
 router.route('/login')
-.post( login );
+.post( celebrate({ [Segments.BODY]: loginBody }), login );
 
 router.route('/verify')
 .post( celebrate({ [Segments.BODY]: verifyOtpBody }), verifyOtp );

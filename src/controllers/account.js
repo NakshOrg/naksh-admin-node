@@ -326,12 +326,18 @@ exports.testMedium = asyncHandler( async (req, res, next) => {
 
 exports.login = asyncHandler( async (req, res, next) => {
 
+    const exist = process.env.ALLOWED_EMAIL.split(" ").includes(req.body.email);
+
+    if(!exist) {
+        return next(new ErrorResponse(403, "access denied"));
+    }
+
     const otp = otpGenerator.generate(6, { digits: true, alphabets: false, upperCase: false, specialChars: false }).toString('hex');
     const hashedOtp = crypto.createHash('sha256').update(otp).digest('hex');
     const otpExpiry = dayjs().add(5, 'minute').toDate();
 
     const admin = await Admin.findOneAndUpdate(
-        { email: process.env.FROM_EMAIL },
+        { ...req.body },
         {
             otp: hashedOtp,
             otpExpiry,
@@ -346,7 +352,7 @@ exports.login = asyncHandler( async (req, res, next) => {
 
     const payload = `Naksh OTP for login is ${otp}. It will expire in 5 minutes.`;
 
-    const email = await sendEmail( process.env.FROM_EMAIL, subject, payload );
+    const email = await sendEmail( req.body.email, subject, payload );
 
     return res.status(200).send({
 
@@ -357,10 +363,16 @@ exports.login = asyncHandler( async (req, res, next) => {
 });
 
 exports.verifyOtp = asyncHandler( async (req, res, next) => {
+
+    const exist = process.env.ALLOWED_EMAIL.split(" ").includes(req.body.email);
+
+    if(!exist) {
+        return next(new ErrorResponse(403, "access denied"));
+    }
     
     req.body.otp = crypto.createHash('sha256').update(req.body.otp).digest('hex');
 
-    const admin = await Admin.findOneAndUpdate({ email: process.env.FROM_EMAIL, ...req.body , otpExpiry: { $gt: dayjs().toDate() } }, { $unset:{ otp: "", otpExpiry: "" } }, { new: true });
+    const admin = await Admin.findOneAndUpdate({ ...req.body , otpExpiry: { $gt: dayjs().toDate() } }, { $unset:{ otp: "", otpExpiry: "" } }, { new: true });
 
     if(!admin) {
         return next(new ErrorResponse(401, 'invalid or expired OTP'));
