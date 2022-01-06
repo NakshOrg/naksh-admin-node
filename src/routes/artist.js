@@ -17,16 +17,18 @@ const {
     getOneArtist
 } = require('../controllers/artist');
 
+const { auth, restrictAdmin } = require('../middlewares/auth');
+
 router.route('/add')
-.post( celebrate({ [Segments.BODY]: addArtistBody }), addArtist );
+.post( celebrate({ [Segments.BODY]: addArtistBody }), auth, restrictAdmin, addArtist );
 
 router.route('/update')
-.patch( celebrate({ [Segments.QUERY]: updateArtistQuery, [Segments.BODY]: updateArtistBody }), updateArtist );
+.patch( celebrate({ [Segments.QUERY]: updateArtistQuery, [Segments.BODY]: updateArtistBody }), auth, restrictAdmin, updateArtist );
 
 router.route('/all')
-.get( celebrate({ [Segments.QUERY]: getAllArtistQuery }), getAllArtist );
+.get( celebrate({ [Segments.QUERY]: getAllArtistQuery }), auth, restrictAdmin, getAllArtist );
 
 router.route('/get')
-.get( celebrate({ [Segments.QUERY]: getOneArtistQuery }), getOneArtist );
+.get( celebrate({ [Segments.QUERY]: getOneArtistQuery }), auth, restrictAdmin, getOneArtist );
 
 module.exports = router;

@@ -2,5 +2,5 @@
 .near-credentials
 node_modules
 dev.md
-*.wasm
+contracts
 raccoon.jpg

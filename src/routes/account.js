@@ -2,12 +2,25 @@ const router = require('express').Router();
 
 const { celebrate, Segments } = require('celebrate');
 
-const { accountDetails, connectWallet, testPinata } = require('../controllers/account');
+const {
+    login,
+    verifyOtp,
+    accountDetails,
+    connectWallet,
+    testPinata
+} = require('../controllers/account');
 
 const {
+    verifyOtpBody,
     connectWalletQuery,
     accountDetailsQuery
 } = require('../validators/account');
+
+router.route('/login')
+.post( login );
+
+router.route('/verify')
+.post( celebrate({ [Segments.BODY]: verifyOtpBody }), verifyOtp );
 
 router.route('/test')
 .get( celebrate({ [Segments.QUERY]: connectWalletQuery }), connectWallet );

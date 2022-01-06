@@ -1,5 +1,11 @@
 const { Joi } = require('celebrate');
 
+exports.verifyOtpBody = Joi.object().keys({
+
+    otp: Joi.string().required()
+
+});
+
 exports.connectWalletQuery = Joi.object().keys({
 
     creatorAccountId: Joi.string().required(),

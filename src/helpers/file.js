@@ -4,6 +4,8 @@ const S3 = require('aws-sdk/clients/s3');
 
 const { logger } = require('../helpers/logger');
 
+const { asyncHandler } = require('../middlewares/asyncHandler');
+
 const s3 = new S3({
     apiVersion: '2006-03-01',
     region: 'ap-south-1',
@@ -13,7 +15,7 @@ const s3 = new S3({
     }
 });
 
-exports.s3PutUrl = async ( module, totalFiles ) => {
+exports.s3PutUrl = asyncHandler(async ( module, totalFiles ) => {
 
     let putUrlArray = [];
 
@@ -50,9 +52,9 @@ exports.s3PutUrl = async ( module, totalFiles ) => {
 
     return putUrlArray;
 
-};
+});
 
-exports.s3GetUrl = async ( file ) => {
+exports.s3GetUrl = asyncHandler(async ( file ) => {
 
     let params = {
         Bucket: process.env.S3_BUCKET_NAME,
@@ -71,9 +73,9 @@ exports.s3GetUrl = async ( file ) => {
         });
     });
 
-};
+});
 
-exports.s3DeleteMultiple = async ( files ) => {
+exports.s3DeleteMultiple = asyncHandler(async ( files ) => {
 
     return await new Promise((resolve, reject) => {
         
@@ -95,4 +97,4 @@ exports.s3DeleteMultiple = async ( files ) => {
         });
     });
 
-};
+});

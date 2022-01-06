@@ -5,6 +5,8 @@ const { ErrorResponse } = require('../helpers/error');
 const Artform = require('../models/artform');
 const Artist = require('../models/artist');
 
+const dayjs = require('dayjs');
+
 exports.addArtForm = asyncHandler(async (req, res, next) => {
 
     let result = [];
@@ -21,7 +23,7 @@ exports.addArtForm = asyncHandler(async (req, res, next) => {
 
             await new Artform({
                 name: req.body.artforms[i],
-                createdAt: Date.now()
+                createdAt: dayjs().toDate()
             }).save();
 
             result.push( { success: `${req.body.artforms[i]} was added`} );

@@ -1,6 +1,7 @@
 const { asyncHandler } = require('../middlewares/asyncHandler');
 
 const { Types } = require('mongoose');
+const dayjs = require('dayjs');
 
 const { ErrorResponse } = require('../helpers/error');
 const { getOrganizationImages, getArtistImages } = require('../helpers/methods');
@@ -10,7 +11,7 @@ const Artist = require('../models/artist');
 
 exports.addOrganization = asyncHandler(async (req, res, next) => {
 
-    const organization = await new Organization({ ...req.body, createdAt: Date.now() }).save();
+    const organization = await new Organization({ ...req.body, createdAt: dayjs().toDate() }).save();
 
     await getOrganizationImages( organization );
 

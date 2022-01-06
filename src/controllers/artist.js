@@ -6,11 +6,12 @@ const { getArtistImages } = require('../helpers/methods');
 const Artist = require('../models/artist');
 
 const { Types } = require('mongoose');
+const dayjs = require('dayjs');
 
 // ! Wallet data?
 exports.addArtist = asyncHandler(async (req, res, next) => {
 
-    const artist = await new Artist({ ...req.body, status: 0, createdAt: Date.now() }).save();
+    const artist = await new Artist({ ...req.body, status: 0, createdAt: dayjs().toDate() }).save();
 
     await getArtistImages( artist );
 

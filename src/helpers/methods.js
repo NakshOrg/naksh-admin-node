@@ -1,6 +1,8 @@
 const { s3GetUrl } = require('../helpers/file');
 
-exports.getOrganizationImages = async ( organization ) => {
+const { asyncHandler } = require('../middlewares/asyncHandler');
+
+exports.getOrganizationImages = asyncHandler(async ( organization ) => {
 
     if( organization.image && organization.image != null ) {
         organization.image = await s3GetUrl(organization.image);
@@ -11,9 +13,9 @@ exports.getOrganizationImages = async ( organization ) => {
             organization.custom[i].fileUrl = await s3GetUrl(organization.custom[i].fileKey);
         }
     }
-}
+});
 
-exports.getArtistImages = async ( artist ) => {
+exports.getArtistImages = asyncHandler(async ( artist ) => {
 
     if( artist.image && artist.image != null ) {
         artist.image = await s3GetUrl(artist.image);
@@ -24,4 +26,4 @@ exports.getArtistImages = async ( artist ) => {
             artist.custom[i].fileUrl = await s3GetUrl(artist.custom[i].fileKey);
         }
     }
-}
+});

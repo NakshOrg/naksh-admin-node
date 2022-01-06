@@ -10,7 +10,7 @@ const { contextMiddleware } = require('./helpers/logger');
 const { notFound } = require('./middlewares/notFound');
 const { errorHandler } = require('./middlewares/errorHandler');
 
-const wallet = require('./routes/account');
+const account = require('./routes/account');
 const artform = require('./routes/artform');
 const organization = require('./routes/organization');
 const artist = require('./routes/artist');
@@ -26,7 +26,7 @@ app.use(helmet());
 app.use(cookieParser());
 app.use(contextMiddleware);
 
-app.use('/admin/account', wallet);
+app.use('/admin/account', account);
 app.use('/admin/artform', artform);
 app.use('/admin/organization', organization);
 app.use('/admin/artist', artist);
