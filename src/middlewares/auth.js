@@ -8,8 +8,8 @@ const { asyncHandler } = require('../middlewares/asyncHandler');
 
 exports.auth = asyncHandler( async (req, res, next) => {
 
-    if(req.header('token')) {
-        const token = req.header('token').replace('Bearer ','');
+    if(req.header('Authorization')) {
+        const token = req.header('Authorization').replace('Bearer ','');
         
         await jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
             if(err) {
