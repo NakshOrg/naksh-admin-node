@@ -90,6 +90,12 @@ exports.getAllArtform = asyncHandler(async (req, res, next) => {
 
     aggregateParams.push({ $addFields: replaceArtist });
 
+    const latestSort = {
+        createdAt: -1
+    };
+
+    aggregateParams.push({ $sort: latestSort });
+
     const artforms = await Artform.aggregate(aggregateParams).collation({locale: "en"});
 
     return res.status(200).send({ artforms });
