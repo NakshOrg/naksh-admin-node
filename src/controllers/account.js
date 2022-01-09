@@ -298,32 +298,6 @@ exports.testPinata = asyncHandler( async (req, res, next) => {
 
 });
 
-exports.testMedium = asyncHandler( async (req, res, next) => {
-
-    const auth = await pinata.testAuthentication();
-
-    const readableStreamForFile = fs.createReadStream(path.join(__dirname, "../../raccoon.jpg"));
-
-    const options = {
-        pinataMetadata: {
-            name: "abhi",
-            keyvalues: {
-                customKey: 'customValue',
-                issuedAt: Date.now().toString(),
-                issuedBy: "naksh"
-            }
-        },
-        pinataOptions: {
-            cidVersion: 0
-        }
-    };
-
-    const upload = await pinata.pinFileToIPFS(readableStreamForFile, options);
-    
-    return res.status(200).send({ auth, upload });
-
-});
-
 exports.login = asyncHandler( async (req, res, next) => {
 
     const exist = process.env.ALLOWED_EMAIL.split(" ").includes(req.body.email);

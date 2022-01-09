@@ -14,6 +14,7 @@ const account = require('./routes/account');
 const artform = require('./routes/artform');
 const organization = require('./routes/organization');
 const artist = require('./routes/artist');
+const nft = require('./routes/nft');
 const file = require('./routes/file');
 
 const app = express();
@@ -30,6 +31,7 @@ app.use('/admin/account', account);
 app.use('/admin/artform', artform);
 app.use('/admin/organization', organization);
 app.use('/admin/artist', artist);
+app.use('/admin/nft', nft );
 app.use('/admin/file', file );
 
 app.use( notFound );
