@@ -8,9 +8,24 @@ const pinata = pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECR
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
-const uploadFile = multer({ dest: 'uploads/' }).single('image');
+const uploadFile = multer().single('image');
 
 exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
+
+    uploadFile(req, res, async (err) => {
+            if (err instanceof multer.MulterError) {
+              // A Multer error occurred when uploading.
+            } else if (err) {
+              // An unknown error occurred when uploading.
+            }
+        
+            // Everything went fine.
+
+            const fileData = req.file?.hasOwnProperty("originalname") ? req.file.originalname : null ;
+
+            return res.status(200).send({ fileData, url: "https://gateway.pinata.cloud/ipfs/Qmag81KE1agXXfbvouoxxcyEVu7DPFDZbLcoWwb2Zhei1E" });
+    
+    });
 
     // uploadFile(req, res, async (err) => {
     //     if (err instanceof multer.MulterError) {
@@ -54,11 +69,7 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
     //     const url = `${process.env.PINATA_PREVIEW_URL}${upload.IpfsHash}`;
 
     //     fs.unlinkSync(path.join(__dirname, `../../${req.file.path}`));
-        
-        
 
     // });
-
-    return res.status(200).send({ url: "https://gateway.pinata.cloud/ipfs/Qmag81KE1agXXfbvouoxxcyEVu7DPFDZbLcoWwb2Zhei1E" });
 
 });
