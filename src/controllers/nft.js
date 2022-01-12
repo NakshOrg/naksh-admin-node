@@ -9,7 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const uploadFile = multer(
-    { dest: process.env.MULTER_DEST }
+    { dest: __dirname + '../../uploads/' }
     ).fields([
     { name: 'nftImage', maxCount: 1 },
     { name: 'custom', maxCount: 2 }
@@ -41,7 +41,7 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
 
         for(let nftImage of req.files.nftImage) {
 
-            const readableStreamForFile = fs.createReadStream(path.join(__dirname, `../../${nftImage.path}`));
+            const readableStreamForFile = fs.createReadStream(nftImage.path);
 
             const options = {
                 pinataMetadata: {
@@ -65,7 +65,7 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
 
             nftImageUrl = `${process.env.PINATA_PREVIEW_URL}${upload.IpfsHash}`;
 
-            fs.unlinkSync(path.join(__dirname, `../../${nftImage.path}`));
+            fs.unlinkSync(nftImage.path);
             
         }
         
