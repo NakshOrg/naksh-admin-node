@@ -9,7 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const uploadFile = multer(
-    { dest: __dirname + '../../uploads/' }
+    { dest: __dirname + '/../../uploads/' }
     ).fields([
     { name: 'nftImage', maxCount: 1 },
     { name: 'custom', maxCount: 2 }
