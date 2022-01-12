@@ -266,7 +266,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     //     attachedDeposit
     // };
 
-    const data = await mainAccount.functionCall(FunctionCallOptions);
+    // const data = await mainAccount.functionCall(FunctionCallOptions);
 
     return res.status(200).send({ data });
 
