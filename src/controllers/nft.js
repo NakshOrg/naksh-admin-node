@@ -12,7 +12,7 @@ const uploadFile = multer(
     { dest: __dirname + '/../../uploads/' }
     ).fields([
     { name: 'nftImage', maxCount: 1 },
-    { name: 'custom', maxCount: 2 }
+    { name: 'custom', maxCount: 10 }
 ]);
 
 exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
@@ -60,7 +60,7 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
             const upload = await pinata.pinFileToIPFS(readableStreamForFile, options);
 
             if(upload.IpfsHash == (undefined || null || "")) {
-                return next(new ErrorResponse(400, "error uploading file to IPFS storage"));
+                return next(new ErrorResponse(400, "error uploading nft file to IPFS storage"));
             }
 
             nftImageUrl = `${process.env.PINATA_PREVIEW_URL}${upload.IpfsHash}`;
@@ -68,8 +68,37 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
             fs.unlinkSync(nftImage.path);
             
         }
-        
 
+        for(let customImage of req.files.custom) {
+
+            const readableStreamForFile = fs.createReadStream(customImage.path);
+
+            const options = {
+                pinataMetadata: {
+                    name: customImage.originalname,
+                    keyvalues: {
+                        customKey: 'customValue',
+                        issuedAt: Date.now().toString(),
+                        issuedBy: "naksh"
+                    }
+                },
+                pinataOptions: {
+                    cidVersion: 0
+                }
+            };
+
+            const upload = await pinata.pinFileToIPFS(readableStreamForFile, options);
+
+            if(upload.IpfsHash == (undefined || null || "")) {
+                return next(new ErrorResponse(400, "error uploading custom file to IPFS storage"));
+            }
+
+            custom.push(`${process.env.PINATA_PREVIEW_URL}${upload.IpfsHash}`);
+
+            fs.unlinkSync(customImage.path);
+            
+        }
+        
         return res.status(200).send({ nftImageUrl, custom });
 
     });
