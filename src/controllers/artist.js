@@ -11,6 +11,13 @@ const dayjs = require('dayjs');
 // ! Wallet data?
 exports.addArtist = asyncHandler(async (req, res, next) => {
 
+    if(req.body.hasOwnProperty('wallet')) {
+        const exist = await Artist.findOne({ wallet: req.body.wallet });
+        if(exist) {
+            return next(new ErrorResponse(404, "wallet already associated with another artist"));
+        }
+    }
+
     const artist = await new Artist({ ...req.body, status: 0, createdAt: dayjs().toDate() }).save();
 
     await getArtistImages( artist );
@@ -19,6 +26,13 @@ exports.addArtist = asyncHandler(async (req, res, next) => {
 });
 
 exports.updateArtist = asyncHandler(async (req, res, next) => {
+
+    if(req.body.hasOwnProperty('wallet')) {
+        const exist = await Artist.findOne({ wallet: req.body.wallet });
+        if(exist) {
+            return next(new ErrorResponse(404, "wallet already associated with another artist"));
+        }
+    }
 
     const artist = await Artist.findOneAndUpdate({ _id: req.query.id }, req.body, { new: true });
 
@@ -39,6 +53,10 @@ exports.getAllArtist = asyncHandler(async (req, res, next) => {
 
     if(req.query.hasOwnProperty('search')) {
         filter.name = { $regex: req.query.search, $options: 'gi' };
+    }
+
+    if(req.query.hasOwnProperty('wallet')) {
+        filter.wallet = { $regex: `^${req.query.wallet}$`, $options: 'gi' };
     }
 
     if(req.query.hasOwnProperty('state')) {
