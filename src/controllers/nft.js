@@ -22,11 +22,11 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
 
         if (err instanceof multer.MulterError) {
           // A Multer error occurred when uploading.
-          console.log({ err: "one" });
+          console.log({ "one": err });
           return next(new ErrorResponse(400, err.message ));
         } else if (err) {
           // An unknown error occurred when uploading.
-          console.log({ err: "two" });
+          console.log({ "two": err });
           return next(new ErrorResponse(400, err.message ));
         }
     
