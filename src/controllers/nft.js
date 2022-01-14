@@ -21,7 +21,6 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
     uploadFile(req, res, async (err) => {
         if (err instanceof multer.MulterError) {
           // A Multer error occurred when uploading.
-          return res.send({ err })
           return next(new ErrorResponse(400, err.message ));
         } else if (err) {
           // An unknown error occurred when uploading.
