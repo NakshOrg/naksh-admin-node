@@ -72,8 +72,8 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // const nearBalance = utils.format.formatNearAmount(yoctoNearBalance.available);
 
     //! SMART CONTRACT
-    // const nftContract = fs.readFileSync(path.join(__dirname, "../../contracts/nft.wasm"));
-    // const newNftAccount = await mainAccount.createAndDeployContract(`nft1.abhishekvenunathan.testnet`, nftKeyPair.getPublicKey(), nftContract, utils.format.parseNearAmount("10") );
+    // const nftContract = fs.readFileSync(path.join(__dirname, "../../contracts/main.wasm"));
+    // const data = await mainAccount.createAndDeployContract(`nft1.abhishekvenunathan.testnet`, nftKeyPair.getPublicKey(), nftContract, utils.format.parseNearAmount("10") );
     // const marketContract = fs.readFileSync(path.join(__dirname, "../../contracts/market.wasm"));
     // const newMarketAccount = await mainAccount.createAndDeployContract(`market1.abhishekvenunathan.testnet`, marketKeyPair.getPublicKey(), marketContract, utils.format.parseNearAmount("10") );
     
@@ -102,7 +102,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     //     }
     // };
 
-    // const nftData = await nftAccount.functionCall(nftFunctionCallOptions);
+    // const data = await nftAccount.functionCall(nftFunctionCallOptions);
 
     // const marketMetadata = {
     //     spec: "nft-1",
@@ -129,7 +129,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // const data = { nftData, marketData };
     
 
-    //! 2 - MINT
+    // //! 2 - MINT
     // const metadata = {
     //     media: "https://miro.medium.com/max/1400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg",
     //     issued_at: Date.now()
@@ -146,9 +146,12 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     //     contractId: 'nft1.abhishekvenunathan.testnet',
     //     methodName: 'nft_mint',
     //     args: {
-    //         token_id: 'abhishek-' + Date.now(),
+    //         token_id: [ 'abhishek1-' + Date.now(), 'abhishek2-' + Date.now() ],
+    //         // new line below
+    //         receiver_id: 'abhishekvenunathan.testnet',
     //         metadata,
-    //         perpetual_royalties
+    //         perpetual_royalties,
+    //         num_mint: 2
     //     },
     //     gas,
     //     attachedDeposit
@@ -171,7 +174,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     // const data = await mainAccount.functionCall(FunctionCallOptions);
 
-    let token_id = "abhishek-1639733525321";
+    let token_id = "abhishek-1642336041965";
 
     // ! 5 - APPROVE NFT SALE
     // const gas = 200000000000000;
@@ -182,7 +185,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     //     args: {
     //         account_id: 'market1.abhishekvenunathan.testnet',
     //         token_id,
-    //         msg: "{\"sale_conditions\":\"10\"}"
+    //         msg: "{\"sale_conditions\":\"0\"}"
     //     },
     //     gas,
     //     attachedDeposit
@@ -199,22 +202,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     //     args: {
     //         nft_contract_id: 'nft1.abhishekvenunathan.testnet',
     //         token_id,
-    //         price: '5'
-    //     },
-    //     gas,
-    //     attachedDeposit
-    // };
-
-    // const data = await mainAccount.functionCall(FunctionCallOptions);
-
-    //! 7 - GET SALE
-    // const gas = 200000000000000;
-    // const attachedDeposit = "1";
-    // const FunctionCallOptions = {
-    //     contractId: 'market1.abhishekvenunathan.testnet',
-    //     methodName: 'get_supply_by_nft_contract_id',
-    //     args: {
-    //         nft_contract_id: 'nft1.abhishekvenunathan.testnet'
+    //         price: '15'
     //     },
     //     gas,
     //     attachedDeposit
@@ -238,7 +226,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     // const data = await mainAccount.functionCall(FunctionCallOptions);
 
-    //! 9 - BURN NFT WORKAROUND
+    // //! 9 - BURN NFT WORKAROUND
     // const gas = 200000000000000;
     // const attachedDeposit = 1;
     // const FunctionCallOptions = {
@@ -246,7 +234,8 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     //     methodName: 'nft_transfer',
     //     args: {
     //         receiver_id: "0x0",
-    //         token_id
+    //         token_id: "abhishek-1642336041965",
+    //         // approval_id: "abhishekvenunathan.testnet"
     //     },
     //     gas,
     //     attachedDeposit
@@ -254,19 +243,16 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     // const data = await mainAccount.functionCall(FunctionCallOptions);
 
-    //! 10 - VIEW ALL NFT
-    // const gas = 200000000000000;
-    // const attachedDeposit = utils.format.parseNearAmount("0.1");
+    //! 10 - VIEW NFT
 
-    // const FunctionCallOptions = {
-    //     contractId: 'nft1.abhishekvenunathan.testnet',
-    //     methodName: 'nft_tokens',
-    //     args: {},
-    //     gas,
-    //     attachedDeposit
-    // };
-
-    // const data = await mainAccount.functionCall(FunctionCallOptions);
+    // ! ALL MINTED NFT
+    // const data = await mainAccount.viewFunction('nft1.abhishekvenunathan.testnet', 'nft_tokens', { from_index: "0", limit: 1000 });
+    // ! ALL NFT OF ONE ACCOUNT
+    // const data = await mainAccount.viewFunction('nft1.abhishekvenunathan.testnet', 'nft_tokens_for_owner', { account_id: "abhishekvenunathan.testnet", from_index: "0", limit: 1000 });
+    // ! ALL SALE NFT
+    const data = await mainAccount.viewFunction('market1.abhishekvenunathan.testnet', 'get_sales_by_nft_contract_id', { nft_contract_id: 'nft1.abhishekvenunathan.testnet', from_index: "0", limit: 1000 });
+    // ! ONE SALE
+    // const data = await mainAccount.viewFunction('market1.abhishekvenunathan.testnet', 'get_sale', { nft_contract_token: `nft1.abhishekvenunathan.testnet.${token_id}` });
 
     return res.status(200).send({ data });
 
