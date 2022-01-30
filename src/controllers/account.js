@@ -250,7 +250,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // ! ALL NFT OF ONE ACCOUNT
     // const data = await mainAccount.viewFunction('nft1.abhishekvenunathan.testnet', 'nft_tokens_for_owner', { account_id: "abhishekvenunathan.testnet", from_index: "0", limit: 1000 });
     // ! ALL SALE NFT
-    const data = await mainAccount.viewFunction('market1.abhishekvenunathan.testnet', 'get_sales_by_nft_contract_id', { nft_contract_id: 'nft1.abhishekvenunathan.testnet', from_index: "0", limit: 1000 });
+    // const data = await mainAccount.viewFunction('market1.abhishekvenunathan.testnet', 'get_sales_by_nft_contract_id', { nft_contract_id: 'nft1.abhishekvenunathan.testnet', from_index: "0", limit: 1000 });
     // ! ONE SALE
     // const data = await mainAccount.viewFunction('market1.abhishekvenunathan.testnet', 'get_sale', { nft_contract_token: `nft1.abhishekvenunathan.testnet.${token_id}` });
 
