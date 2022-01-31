@@ -28,7 +28,7 @@ exports.addArtist = asyncHandler(async (req, res, next) => {
 exports.updateArtist = asyncHandler(async (req, res, next) => {
 
     if(req.body.hasOwnProperty('wallet')) {
-        const exist = await Artist.findOne({ wallet: req.body.wallet });
+        const exist = await Artist.findOne({ _id: { $ne: req.query.id }, wallet: req.body.wallet });
         if(exist) {
             return next(new ErrorResponse(404, "wallet already associated with another artist"));
         }
