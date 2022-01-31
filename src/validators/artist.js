@@ -113,6 +113,7 @@ exports.getAllArtistQuery = Joi.object().keys({
     sort: Joi.number().equal(1,-1).required(),
     search: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     wallet: Joi.string().pattern(walletRegex, walletRegexName),
+    id: Joi.string().alphanum().length(24),
     state: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     status: Joi.number().equal(0, 1),
     artform: Joi.string().alphanum().length(24)

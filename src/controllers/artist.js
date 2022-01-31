@@ -59,6 +59,10 @@ exports.getAllArtist = asyncHandler(async (req, res, next) => {
         filter.wallet = { $regex: `^${req.query.wallet}$`, $options: 'gi' };
     }
 
+    if(req.query.hasOwnProperty('id')) {
+        filter._id = Types.ObjectId(req.query.id);
+    }
+
     if(req.query.hasOwnProperty('state')) {
         filter.state = req.query.state;
     }
