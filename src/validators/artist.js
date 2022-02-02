@@ -54,7 +54,8 @@ exports.addArtistBody = Joi.object().keys({
             then: Joi.string().required(),
             otherwise: Joi.forbidden()
         })
-    }))
+    })),
+    createdBy: Joi.number().equal(0, 1).default(0)
 
 });
 

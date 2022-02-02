@@ -4,6 +4,10 @@ const { customSchema } = require('./custom');
 
 const artistSchema = new Schema({
 
+    createdBy: {
+        type: Number
+    },
+
     image: {
         type: String
     },
@@ -79,9 +83,12 @@ const artistSchema = new Schema({
 });
 
 /*
-status:
+! status:
 0 - active
 1 - inactive
+! createdBy:
+0 - admin
+1 - client
 */
 
 module.exports = model("Artist", artistSchema, "artists");
