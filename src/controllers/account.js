@@ -48,7 +48,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // MARKET ACCOUNT
     const marketParsedSeedPhrase = parseSeedPhrase(process.env.MARKET_ACCOUNT_SEEDPHRASE);
     const marketKeyPair = utils.KeyPair.fromString(marketParsedSeedPhrase.secretKey);
-    await keyStore.setKey('testnet', 'market1.abhishekvenunathan.testnet', marketKeyPair);
+    await keyStore.setKey('testnet', 'market3.abhishekvenunathan.testnet', marketKeyPair);
 
     const config = {
         networkId: "testnet",
@@ -63,7 +63,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     const mainAccount = await near.account("abhishekvenunathan.testnet");
     const nftAccount = await near.account("nft1.abhishekvenunathan.testnet");
-    const marketAccount = await near.account("market1.abhishekvenunathan.testnet");
+    const marketAccount = await near.account("market3.abhishekvenunathan.testnet");
 
     // const data = await account.sendMoney("abhishekvenunathan.testnet", 100);
 
@@ -74,8 +74,8 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     //! SMART CONTRACT
     // const nftContract = fs.readFileSync(path.join(__dirname, "../../contracts/main.wasm"));
     // const data = await mainAccount.createAndDeployContract(`nft1.abhishekvenunathan.testnet`, nftKeyPair.getPublicKey(), nftContract, utils.format.parseNearAmount("10") );
-    // const marketContract = fs.readFileSync(path.join(__dirname, "../../contracts/market.wasm"));
-    // const newMarketAccount = await mainAccount.createAndDeployContract(`market1.abhishekvenunathan.testnet`, marketKeyPair.getPublicKey(), marketContract, utils.format.parseNearAmount("10") );
+    // const marketContract = fs.readFileSync(path.join(__dirname, "../../contracts/market_new.wasm"));
+    // const data = await mainAccount.createAndDeployContract(`market3.abhishekvenunathan.testnet`, marketKeyPair.getPublicKey(), marketContract, utils.format.parseNearAmount("10") );
     
     // const txs = await marketAccount.deployContract(marketContract);
     
@@ -115,10 +115,10 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // };
 
     // const marketFunctionCallOptions = {
-    //     contractId: 'market1.abhishekvenunathan.testnet',
+    //     contractId: 'market3.abhishekvenunathan.testnet',
     //     methodName: 'new',
     //     args: {
-    //         owner_id: 'market1.abhishekvenunathan.testnet',
+    //         owner_id: 'market3.abhishekvenunathan.testnet',
     //         metadata: marketMetadata,
     //         supply_cap_by_type: market_supply_cap_by_type
     //     }
@@ -146,12 +146,9 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     //     contractId: 'nft1.abhishekvenunathan.testnet',
     //     methodName: 'nft_mint',
     //     args: {
-    //         token_id: [ 'abhishek1-' + Date.now(), 'abhishek2-' + Date.now() ],
-    //         // new line below
-    //         receiver_id: 'abhishekvenunathan.testnet',
+    //         token_id: 'abhishek1-' + Date.now(),
     //         metadata,
-    //         perpetual_royalties,
-    //         num_mint: 2
+    //         perpetual_royalties
     //     },
     //     gas,
     //     attachedDeposit
@@ -165,7 +162,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // const attachedDeposit = utils.format.parseNearAmount("0.1");
 
     // const FunctionCallOptions = {
-    //     contractId: 'market1.abhishekvenunathan.testnet',
+    //     contractId: 'market3.abhishekvenunathan.testnet',
     //     methodName: 'storage_deposit',
     //     args: {},
     //     gas,
@@ -174,18 +171,18 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     // const data = await mainAccount.functionCall(FunctionCallOptions);
 
-    let token_id = "abhishek-1642336041965";
+    let token_id = "abhishek1-1643781956892";
 
     // ! 5 - APPROVE NFT SALE
     // const gas = 200000000000000;
-    // const attachedDeposit = utils.format.parseNearAmount("10");
+    // const attachedDeposit = utils.format.parseNearAmount("1");
     // const FunctionCallOptions = {
     //     contractId: 'nft1.abhishekvenunathan.testnet',
     //     methodName: 'nft_approve',
     //     args: {
-    //         account_id: 'market1.abhishekvenunathan.testnet',
+    //         account_id: 'market3.abhishekvenunathan.testnet',
     //         token_id,
-    //         msg: "{\"sale_conditions\":\"0\"}"
+    //         msg: "{\"sale_conditions\":\"4\"}"
     //     },
     //     gas,
     //     attachedDeposit
@@ -214,7 +211,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // const gas = 200000000000000;
     // const attachedDeposit = utils.format.parseNearAmount("1");
     // const FunctionCallOptions = {
-    //     contractId: 'market1.abhishekvenunathan.testnet',
+    //     contractId: 'market3.abhishekvenunathan.testnet',
     //     methodName: 'offer',
     //     args: {
     //         nft_contract_id: 'nft1.abhishekvenunathan.testnet',
@@ -224,7 +221,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     //     attachedDeposit
     // };
 
-    // const data = await mainAccount.functionCall(FunctionCallOptions);
+    // const data = await nftAccount.functionCall(FunctionCallOptions);
 
     // //! 9 - BURN NFT WORKAROUND
     // const gas = 200000000000000;
