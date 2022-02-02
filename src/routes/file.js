@@ -9,6 +9,6 @@ const { s3PutpresignedUrl } = require('../controllers/file');
 const { auth, restrictAdmin } = require('../middlewares/auth');
 
 router.route('/upload')
-.post( celebrate({ [Segments.BODY]: s3PutpresignedUrlBody }), auth, restrictAdmin, s3PutpresignedUrl );
+.post( celebrate({ [Segments.BODY]: s3PutpresignedUrlBody }), s3PutpresignedUrl );
 
 module.exports = router;
