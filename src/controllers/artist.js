@@ -92,6 +92,13 @@ exports.getAllArtist = asyncHandler(async (req, res, next) => {
 
     aggregateParams.push({ $lookup: artformLookup });
 
+    let artformUnwind = {
+        path: "$artform",
+        preserveNullAndEmptyArrays: true
+    };
+
+    aggregateParams.push({ $unwind: artformUnwind });
+
     const artists = await Artist.aggregate(aggregateParams).collation({locale: "en"});
     
     for(let i = 0; i < artists.length; i++) {
