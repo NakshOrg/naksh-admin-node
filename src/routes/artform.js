@@ -30,7 +30,7 @@ router.route('/delete')
 .delete( celebrate({ [Segments.QUERY]: deleteArtFormQuery }), auth, restrictAdmin, deleteArtForm );
 
 router.route('/all')
-.get( auth, restrictAdmin, getAllArtform );
+.get( getAllArtform );
 
 router.route('/get')
 .get( celebrate({ [Segments.QUERY]: getOneArtFormQuery }), auth, restrictAdmin, getOneArtform );
