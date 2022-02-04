@@ -83,6 +83,15 @@ exports.getAllArtist = asyncHandler(async (req, res, next) => {
 
     aggregateParams.push({ $sort });
 
+    const artformLookup = {
+        from: "artforms",
+        localField: "artform",
+        foreignField: "_id",
+        as: "artform"
+    };
+
+    aggregateParams.push({ $lookup: artformLookup });
+
     const artists = await Artist.aggregate(aggregateParams).collation({locale: "en"});
     
     for(let i = 0; i < artists.length; i++) {
