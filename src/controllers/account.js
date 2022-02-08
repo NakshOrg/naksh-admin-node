@@ -38,40 +38,53 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // MAIN ACCOUNT
     const mainParsedSeedPhrase = parseSeedPhrase(process.env.MAIN_ACCOUNT_SEEDPHRASE);
     const mainKeyPair = utils.KeyPair.fromString(mainParsedSeedPhrase.secretKey);
-    await keyStore.setKey('testnet', 'abhishekvenunathan.testnet', mainKeyPair);
+    await keyStore.setKey('mainnet', 'srilakshmi_96.near', mainKeyPair);
 
     // NFT ACCOUNT
     const nftParsedSeedPhrase = parseSeedPhrase(process.env.NFT_ACCOUNT_SEEDPHRASE);
     const nftKeyPair = utils.KeyPair.fromString(nftParsedSeedPhrase.secretKey);
-    await keyStore.setKey('testnet', 'nft1.abhishekvenunathan.testnet', nftKeyPair);
+    await keyStore.setKey('mainnet', 'nft1.srilakshmi_96.near', nftKeyPair);
 
     // MARKET ACCOUNT
     const marketParsedSeedPhrase = parseSeedPhrase(process.env.MARKET_ACCOUNT_SEEDPHRASE);
     const marketKeyPair = utils.KeyPair.fromString(marketParsedSeedPhrase.secretKey);
-    await keyStore.setKey('testnet', 'market1.abhishekvenunathan.testnet', marketKeyPair);
+    await keyStore.setKey('mainnet', 'market1.srilakshmi_96.near', marketKeyPair);
 
-    // NEW ACCOUNT
-    const newParsedSeedPhrase = parseSeedPhrase(process.env.NEW_ACCOUNT_SEEDPHRASE);
-    const newKeyPair = utils.KeyPair.fromString(newParsedSeedPhrase.secretKey);
-    await keyStore.setKey('testnet', 'new1.abhishekvenunathan.testnet', newKeyPair);
+    // TEST CONFIG
+    // const config = {
+    //     networkId: "testnet",
+    //     keyStore,
+    //     nodeUrl: "https://rpc.testnet.near.org",
+    //     walletUrl: "https://wallet.testnet.near.org",
+    //     helperUrl: "https://helper.testnet.near.org",
+    //     explorerUrl: "https://explorer.testnet.near.org",
+    // };
 
+    // MAIN CONFIG
     const config = {
-        networkId: "testnet",
+        networkId: "mainnet",
         keyStore,
-        nodeUrl: "https://rpc.testnet.near.org",
-        walletUrl: "https://wallet.testnet.near.org",
-        helperUrl: "https://helper.testnet.near.org",
-        explorerUrl: "https://explorer.testnet.near.org",
+        nodeUrl: "https://rpc.mainnet.near.org",
+        walletUrl: "https://wallet.mainnet.near.org",
+        helperUrl: "https://helper.mainnet.near.org",
+        explorerUrl: "https://explorer.mainnet.near.org",
     };
     
     const near = await connect(config);
 
-    const mainAccount = await near.account("abhishekvenunathan.testnet");
-    const nftAccount = await near.account("nft1.abhishekvenunathan.testnet");
-    const marketAccount = await near.account("market1.abhishekvenunathan.testnet");
-    const newAccount = await near.account("new1.abhishekvenunathan.testnet");
+    const mainAccountID = "srilakshmi_96.near";
+    const nftAccountID = "nft1.srilakshmi_96.near";
+    const marketAccountID = "market1.srilakshmi_96.near";
 
-    // const data = await mainAccount.createAccount("new1.abhishekvenunathan.testnet", nftKeyPair.getPublicKey(), utils.format.parseNearAmount("50") );
+    const mainAccount = await near.account(mainAccountID);
+    const nftAccount = await near.account(nftAccountID);
+    const marketAccount = await near.account(marketAccountID);
+
+    // console.log(utils.format.formatNearAmount("1257490000000000000000000"));
+
+    // return res.send("hello")
+
+    // const data = await mainAccount.createAccount("new1.srilakshmi_96.near", nftKeyPair.getPublicKey(), utils.format.parseNearAmount("2") );
 
     // const data = await account.sendMoney("abhishekvenunathan.testnet", 100);
 
@@ -80,10 +93,10 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // const nearBalance = utils.format.formatNearAmount(yoctoNearBalance.available);
 
     //! SMART CONTRACT
-    // const nftContract = fs.readFileSync(path.join(__dirname, "../../contracts/main.wasm"));
-    // const data = await mainAccount.createAndDeployContract(`nft1.abhishekvenunathan.testnet`, nftKeyPair.getPublicKey(), nftContract, utils.format.parseNearAmount("10") );
-    // const marketContract = fs.readFileSync(path.join(__dirname, "../../contracts/market_new.wasm"));
-    // const data = await mainAccount.createAndDeployContract(`market1.abhishekvenunathan.testnet`, marketKeyPair.getPublicKey(), marketContract, utils.format.parseNearAmount("10") );
+    // const nftContract = fs.readFileSync(path.join(__dirname, "../../contracts/nft.wasm"));
+    // const data = await mainAccount.createAndDeployContract(`nft1.srilakshmi_96.near`, nftKeyPair.getPublicKey(), nftContract, utils.format.parseNearAmount("4") );
+    // const marketContract = fs.readFileSync(path.join(__dirname, "../../contracts/market.wasm"));
+    // const data = await mainAccount.createAndDeployContract(`market1.srilakshmi_96.near`, marketKeyPair.getPublicKey(), marketContract, utils.format.parseNearAmount("4") );
     
     // const txs = await marketAccount.deployContract(marketContract);
     
@@ -91,9 +104,9 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     //! 1 - INIT
     // const nftMetadata = {
-    //     spec: "nft-1",
-    //     name: "Naksh",
-    //     symbol: "TNFT"
+    //     spec: "nft-1.0.0",
+    //     name: "Srilakshmi",
+    //     symbol: "LAKSH"
     // };
 
     // const nft_supply_cap_by_type = {
@@ -101,10 +114,10 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // };
 
     // const nftFunctionCallOptions = {
-    //     contractId: 'nft1.abhishekvenunathan.testnet',
+    //     contractId: nftAccountID,
     //     methodName: 'new',
     //     args: {
-    //         owner_id: 'nft1.abhishekvenunathan.testnet',
+    //         owner_id: nftAccountID,
     //         metadata: nftMetadata,
     //         supply_cap_by_type: nft_supply_cap_by_type
     //     }
@@ -113,9 +126,9 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // const data = await nftAccount.functionCall(nftFunctionCallOptions);
 
     // const marketMetadata = {
-    //     spec: "nft-1",
-    //     name: "Naksh",
-    //     symbol: "TNFT"
+    //     spec: "nft-1.0.0",
+    //     name: "Srilakshmi",
+    //     symbol: "LAKSH"
     // };
 
     // const market_supply_cap_by_type = {
@@ -123,16 +136,16 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // };
 
     // const marketFunctionCallOptions = {
-    //     contractId: 'market1.abhishekvenunathan.testnet',
+    //     contractId: marketAccountID,
     //     methodName: 'new',
     //     args: {
-    //         owner_id: 'market1.abhishekvenunathan.testnet',
+    //         owner_id: marketAccountID,
     //         metadata: marketMetadata,
     //         supply_cap_by_type: market_supply_cap_by_type
     //     }
     // };
 
-    // const marketData = await marketAccount.functionCall(marketFunctionCallOptions);
+    // const data = await marketAccount.functionCall(marketFunctionCallOptions);
 
     // const data = { nftData, marketData };
     
@@ -181,7 +194,7 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     // const data = await mainAccount.functionCall(FunctionCallOptions);
 
-    let token_id = "abhishek1-1644152699144";
+    // let token_id = "abhishek1-1644152699144";
 
     // ! 5 - APPROVE NFT SALE
     // const gas = 200000000000000;
@@ -274,32 +287,6 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // data = utils.format.formatNearAmount(data);
 
     return res.status(200).send({ data });
-
-});
-
-exports.testPinata = asyncHandler( async (req, res, next) => {
-
-    const auth = await pinata.testAuthentication();
-
-    const readableStreamForFile = fs.createReadStream(path.join(__dirname, "../../raccoon.jpg"));
-
-    const options = {
-        pinataMetadata: {
-            name: "abhi",
-            keyvalues: {
-                customKey: 'customValue',
-                issuedAt: Date.now().toString(),
-                issuedBy: "naksh"
-            }
-        },
-        pinataOptions: {
-            cidVersion: 0
-        }
-    };
-
-    const upload = await pinata.pinFileToIPFS(readableStreamForFile, options);
-    
-    return res.status(200).send({ auth, upload });
 
 });
 

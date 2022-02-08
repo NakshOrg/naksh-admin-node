@@ -6,14 +6,11 @@ const {
     login,
     verifyOtp,
     accountDetails,
-    connectWallet,
-    testPinata
 } = require('../controllers/account');
 
 const {
     loginBody,
     verifyOtpBody,
-    connectWalletQuery,
     accountDetailsQuery
 } = require('../validators/account');
 
@@ -23,13 +20,7 @@ router.route('/login')
 router.route('/verify')
 .post( celebrate({ [Segments.BODY]: verifyOtpBody }), verifyOtp );
 
-router.route('/test')
-.get( celebrate({ [Segments.QUERY]: connectWalletQuery }), connectWallet );
-
 router.route('/details')
-.get( celebrate({ [Segments.QUERY]: accountDetailsQuery }), accountDetails );
-
-router.route('/pinata')
-.get( testPinata );
+.get( accountDetails );
 
 module.exports = router;
