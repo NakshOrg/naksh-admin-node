@@ -117,7 +117,8 @@ exports.getAllArtistQuery = Joi.object().keys({
     id: Joi.string().alphanum().length(24),
     state: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     status: Joi.number().equal(0, 1),
-    artform: Joi.string().alphanum().length(24)
+    artform: Joi.string().alphanum().length(24),
+    createdBy: Joi.number().equal(0, 1)
 
 });
 

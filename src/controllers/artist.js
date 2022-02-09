@@ -75,6 +75,10 @@ exports.getAllArtist = asyncHandler(async (req, res, next) => {
         filter.artform = Types.ObjectId(req.query.artform);
     }
 
+    if(req.query.hasOwnProperty('createdBy')) {
+        filter.createdBy = parseInt(req.query.createdBy);
+    }
+
     aggregateParams.push({ $match: filter });
 
     const $sort = {};
