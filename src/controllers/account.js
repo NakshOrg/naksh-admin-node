@@ -31,6 +31,10 @@ exports.connectWallet = asyncHandler( async (req, res, next) => {
 
 exports.accountDetails = asyncHandler( async (req, res, next) => {
 
+    const mainAccountID = "naksh.near";
+    const nftAccountID = "nft1.naksh.near";
+    const marketAccountID = "market1.naksh.near";
+
     const CREDENTIALS_DIR = "../../.near-credentials";
     const credentialsPath = path.join(__dirname, CREDENTIALS_DIR);
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(credentialsPath);
@@ -38,17 +42,17 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     // MAIN ACCOUNT
     const mainParsedSeedPhrase = parseSeedPhrase(process.env.MAIN_ACCOUNT_SEEDPHRASE);
     const mainKeyPair = utils.KeyPair.fromString(mainParsedSeedPhrase.secretKey);
-    await keyStore.setKey('mainnet', 'srilakshmi_96.near', mainKeyPair);
+    await keyStore.setKey('mainnet', mainAccountID, mainKeyPair);
 
     // NFT ACCOUNT
     const nftParsedSeedPhrase = parseSeedPhrase(process.env.NFT_ACCOUNT_SEEDPHRASE);
     const nftKeyPair = utils.KeyPair.fromString(nftParsedSeedPhrase.secretKey);
-    await keyStore.setKey('mainnet', 'nft1.srilakshmi_96.near', nftKeyPair);
+    await keyStore.setKey('mainnet', nftAccountID, nftKeyPair);
 
     // MARKET ACCOUNT
     const marketParsedSeedPhrase = parseSeedPhrase(process.env.MARKET_ACCOUNT_SEEDPHRASE);
     const marketKeyPair = utils.KeyPair.fromString(marketParsedSeedPhrase.secretKey);
-    await keyStore.setKey('mainnet', 'market1.srilakshmi_96.near', marketKeyPair);
+    await keyStore.setKey('mainnet', marketAccountID, marketKeyPair);
 
     // TEST CONFIG
     // const config = {
@@ -72,17 +76,9 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
     
     const near = await connect(config);
 
-    const mainAccountID = "srilakshmi_96.near";
-    const nftAccountID = "nft1.srilakshmi_96.near";
-    const marketAccountID = "market1.srilakshmi_96.near";
-
     const mainAccount = await near.account(mainAccountID);
     const nftAccount = await near.account(nftAccountID);
     const marketAccount = await near.account(marketAccountID);
-
-    // console.log(utils.format.formatNearAmount("1257490000000000000000000"));
-
-    // return res.send("hello")
 
     // const data = await mainAccount.createAccount("new1.srilakshmi_96.near", nftKeyPair.getPublicKey(), utils.format.parseNearAmount("2") );
 
@@ -94,19 +90,18 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     //! SMART CONTRACT
     // const nftContract = fs.readFileSync(path.join(__dirname, "../../contracts/nft.wasm"));
-    // const data = await mainAccount.createAndDeployContract(`nft1.srilakshmi_96.near`, nftKeyPair.getPublicKey(), nftContract, utils.format.parseNearAmount("4") );
+    // const data = await mainAccount.createAndDeployContract(nftAccountID, nftKeyPair.getPublicKey(), nftContract, utils.format.parseNearAmount("5") );
     // const marketContract = fs.readFileSync(path.join(__dirname, "../../contracts/market.wasm"));
-    // const data = await mainAccount.createAndDeployContract(`market1.srilakshmi_96.near`, marketKeyPair.getPublicKey(), marketContract, utils.format.parseNearAmount("4") );
+    // const data = await mainAccount.createAndDeployContract(marketAccountID, marketKeyPair.getPublicKey(), marketContract, utils.format.parseNearAmount("5") );
     
     // const txs = await marketAccount.deployContract(marketContract);
-    
     // const data = await marketAccount.deleteAccount("abhishekvenunathan.testnet");
 
     //! 1 - INIT
     // const nftMetadata = {
     //     spec: "nft-1.0.0",
-    //     name: "Srilakshmi",
-    //     symbol: "LAKSH"
+    //     name: "Naksh",
+    //     symbol: "NAKSH"
     // };
 
     // const nft_supply_cap_by_type = {
@@ -125,27 +120,27 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     // const data = await nftAccount.functionCall(nftFunctionCallOptions);
 
-    // const marketMetadata = {
-    //     spec: "nft-1.0.0",
-    //     name: "Srilakshmi",
-    //     symbol: "LAKSH"
-    // };
+    const marketMetadata = {
+        spec: "nft-1.0.0",
+        name: "Naksh",
+        symbol: "NAKSH"
+    };
 
-    // const market_supply_cap_by_type = {
-    //     test: '1000000'
-    // };
+    const market_supply_cap_by_type = {
+        test: '1000000'
+    };
 
-    // const marketFunctionCallOptions = {
-    //     contractId: marketAccountID,
-    //     methodName: 'new',
-    //     args: {
-    //         owner_id: marketAccountID,
-    //         metadata: marketMetadata,
-    //         supply_cap_by_type: market_supply_cap_by_type
-    //     }
-    // };
+    const marketFunctionCallOptions = {
+        contractId: marketAccountID,
+        methodName: 'new',
+        args: {
+            owner_id: marketAccountID,
+            metadata: marketMetadata,
+            supply_cap_by_type: market_supply_cap_by_type
+        }
+    };
 
-    // const data = await marketAccount.functionCall(marketFunctionCallOptions);
+    const data = await marketAccount.functionCall(marketFunctionCallOptions);
 
     // const data = { nftData, marketData };
     
