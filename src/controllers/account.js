@@ -120,27 +120,27 @@ exports.accountDetails = asyncHandler( async (req, res, next) => {
 
     // const data = await nftAccount.functionCall(nftFunctionCallOptions);
 
-    const marketMetadata = {
-        spec: "nft-1.0.0",
-        name: "Naksh",
-        symbol: "NAKSH"
-    };
+    // const marketMetadata = {
+    //     spec: "nft-1.0.0",
+    //     name: "Naksh",
+    //     symbol: "NAKSH"
+    // };
 
-    const market_supply_cap_by_type = {
-        test: '1000000'
-    };
+    // const market_supply_cap_by_type = {
+    //     test: '1000000'
+    // };
 
-    const marketFunctionCallOptions = {
-        contractId: marketAccountID,
-        methodName: 'new',
-        args: {
-            owner_id: marketAccountID,
-            metadata: marketMetadata,
-            supply_cap_by_type: market_supply_cap_by_type
-        }
-    };
+    // const marketFunctionCallOptions = {
+    //     contractId: marketAccountID,
+    //     methodName: 'new',
+    //     args: {
+    //         owner_id: marketAccountID,
+    //         metadata: marketMetadata,
+    //         supply_cap_by_type: market_supply_cap_by_type
+    //     }
+    // };
 
-    const data = await marketAccount.functionCall(marketFunctionCallOptions);
+    // const data = await marketAccount.functionCall(marketFunctionCallOptions);
 
     // const data = { nftData, marketData };
     
