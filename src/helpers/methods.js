@@ -20,6 +20,10 @@ exports.getArtistImages = asyncHandler(async ( artist ) => {
     if( artist.image && artist.image != null ) {
         artist.image = await s3GetUrl(artist.image);
     }
+    
+    if( artist.coverImage && artist.coverImage != null ) {
+        artist.coverImage = await s3GetUrl(artist.coverImage);
+    }
 
     for(let i = 0; i < artist.custom.length; i++) {
         if( artist.custom[i].type == 1 ) {

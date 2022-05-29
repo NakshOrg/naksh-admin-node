@@ -6,7 +6,6 @@ const pinataSDK = require('@pinata/sdk');
 const pinata = pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECRET);
 
 const fs = require('fs');
-const path = require('path');
 
 const multer = require('multer');
 const uploadFile = multer(
@@ -43,17 +42,17 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
         }
     
         let nftImageUrl = "";
+        let nftThumbnailUrl = "";
         let custom = [];
     
         for(let nftImage of req.files.nftImage) {
     
-            const readableStreamForFile = fs.createReadStream(nftImage.path);
+            const readableStreamForNFT = fs.createReadStream(nftImage.path);
     
-            const options = {
+            const optionsNFT = {
                 pinataMetadata: {
                     name: nftImage.originalname,
                     keyvalues: {
-                        customKey: 'customValue',
                         issuedAt: Date.now().toString(),
                         issuedBy: "naksh"
                     }
@@ -63,13 +62,36 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
                 }
             };
     
-            const upload = await pinata.pinFileToIPFS(readableStreamForFile, options);
+            const uploadNFT = await pinata.pinFileToIPFS(readableStreamForNFT, optionsNFT);
     
-            if(upload.IpfsHash == (undefined || null || "")) {
+            if(uploadNFT.IpfsHash == (undefined || null || "")) {
                 return next(new ErrorResponse(400, "error uploading nft file to IPFS storage"));
             }
     
-            nftImageUrl = `${process.env.PINATA_PREVIEW_URL}${upload.IpfsHash}`;
+            nftImageUrl = `${process.env.PINATA_PREVIEW_URL}${uploadNFT.IpfsHash}`;
+
+            const readableStreamForThumbnail = fs.createReadStream(nftImage.path);
+    
+            const optionsThumbnail = {
+                pinataMetadata: {
+                    name: `thumbnail_${nftImage.originalname}`,
+                    keyvalues: {
+                        issuedAt: Date.now().toString(),
+                        issuedBy: "naksh"
+                    }
+                },
+                pinataOptions: {
+                    cidVersion: 0
+                }
+            };
+    
+            const uploadThumbnail = await pinata.pinFileToIPFS(readableStreamForThumbnail, optionsThumbnail);
+    
+            if(uploadThumbnail.IpfsHash == (undefined || null || "")) {
+                return next(new ErrorResponse(400, "error uploading nft file to IPFS storage"));
+            }
+    
+            nftThumbnailUrl = `${process.env.PINATA_PREVIEW_URL}${uploadThumbnail.IpfsHash}`;
     
             fs.unlinkSync(nftImage.path);
             
@@ -108,7 +130,7 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
 
         }
         
-        return res.status(200).send({ nftImageUrl, custom });
+        return res.status(200).send({ nftImageUrl, nftThumbnailUrl, custom });
 
     });
 
