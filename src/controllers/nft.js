@@ -15,6 +15,8 @@ const uploadFile = multer(
     { name: 'custom', maxCount: 10 }
 ]);
 
+const Jimp = require('jimp');
+
 exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
 
     uploadFile(req, res, async (err) => {
@@ -69,6 +71,9 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
             }
     
             nftImageUrl = `${process.env.PINATA_PREVIEW_URL}${uploadNFT.IpfsHash}`;
+            
+            const uncompressedImage = await Jimp.read(nftImage.path);
+            await uncompressedImage.quality(10).writeAsync(nftImage.path);
 
             const readableStreamForThumbnail = fs.createReadStream(nftImage.path);
     
