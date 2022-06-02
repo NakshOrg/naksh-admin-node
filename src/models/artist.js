@@ -12,6 +12,10 @@ const artistSchema = new Schema({
         type: String
     },
 
+    coverImage: {
+        type: String
+    },
+
     name: {
         type: String,
         trim: true
