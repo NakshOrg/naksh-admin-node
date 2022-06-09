@@ -34,7 +34,7 @@ exports.updateArtist = asyncHandler(async (req, res, next) => {
         }
     }
 
-    const artist = await Artist.findOneAndUpdate({ _id: req.query.id }, req.body, { new: true, upsert: true, setDefaultsOnInsert: true });
+    const artist = await Artist.findOneAndUpdate({ _id: req.query.id }, req.body, { new: true });
 
     if(!artist) {
         return next(new ErrorResponse(404, "artist not found"));
