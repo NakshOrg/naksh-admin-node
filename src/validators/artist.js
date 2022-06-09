@@ -20,8 +20,16 @@ exports.addArtistBody = Joi.object().keys({
 
     image: Joi.string().allow(null),
     coverStatus: Joi.number().equal(0, 1),
-    coverImage: Joi.string().allow(null),
-    coverGradient: Joi.string().allow(null),
+    coverGradient: Joi.when('coverStatus', {
+        is: Joi.equal(0),
+        then: Joi.string().allow(null).required(),
+        otherwise: Joi.forbidden()
+    }),
+    coverImage: Joi.when('coverStatus', {
+        is: Joi.equal(1),
+        then: Joi.string().allow(null).required(),
+        otherwise: Joi.forbidden()
+    }),
     name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName).required(),
     description: Joi.string(),
     artform: Joi.string().alphanum().length(24),
@@ -72,8 +80,16 @@ exports.updateArtistBody = Joi.object().keys({
 
     image: Joi.string().allow(null),
     coverStatus: Joi.number().equal(0, 1),
-    coverImage: Joi.string().allow(null),
-    coverGradient: Joi.string().allow(null),
+    coverGradient: Joi.when('coverStatus', {
+        is: Joi.equal(0),
+        then: Joi.string().allow(null).required(),
+        otherwise: Joi.forbidden()
+    }),
+    coverImage: Joi.when('coverStatus', {
+        is: Joi.equal(1),
+        then: Joi.string().allow(null).required(),
+        otherwise: Joi.forbidden()
+    }),
     name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     description: Joi.string(),
     artform: Joi.string().alphanum().length(24),
