@@ -13,7 +13,8 @@ const artistSchema = new Schema({
     },
 
     coverStatus: {
-        type: Number
+        type: Number,
+        default: 0
     },
 
     coverImage: {
@@ -21,7 +22,8 @@ const artistSchema = new Schema({
     },
 
     coverGradient: {
-        type: String
+        type: String,
+        default: "linear-gradient(90.14deg, #49BEFF 0.11%, #6E3CFF 99.88%)"
     },
 
     name: {
@@ -99,8 +101,8 @@ const artistSchema = new Schema({
 0 - active
 1 - inactive
 ! coverStatus:
-0 - image
-1 - gradient
+0 - gradient
+1 - image
 ! createdBy:
 0 - admin
 1 - client
