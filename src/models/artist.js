@@ -12,7 +12,15 @@ const artistSchema = new Schema({
         type: String
     },
 
+    coverStatus: {
+        type: Number
+    },
+
     coverImage: {
+        type: String
+    },
+
+    coverGradient: {
         type: String
     },
 
@@ -90,6 +98,9 @@ const artistSchema = new Schema({
 ! status:
 0 - active
 1 - inactive
+! coverStatus:
+0 - image
+1 - gradient
 ! createdBy:
 0 - admin
 1 - client
