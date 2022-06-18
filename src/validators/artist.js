@@ -21,12 +21,12 @@ exports.addArtistBody = Joi.object().keys({
     image: Joi.string().allow(null),
     coverStatus: Joi.number().equal(0, 1),
     coverGradient: Joi.when('coverStatus', {
-        is: Joi.equal(0),
+        is: 0,
         then: Joi.string().allow(null).required(),
         otherwise: Joi.forbidden()
     }),
     coverImage: Joi.when('coverStatus', {
-        is: Joi.equal(1),
+        is: 1,
         then: Joi.string().allow(null).required(),
         otherwise: Joi.forbidden()
     }),
@@ -82,12 +82,12 @@ exports.updateArtistBody = Joi.object().keys({
     image: Joi.string().allow(null),
     coverStatus: Joi.number().equal(0, 1),
     coverGradient: Joi.when('coverStatus', {
-        is: Joi.equal(0),
+        is: 0,
         then: Joi.string().allow(null).required(),
         otherwise: Joi.forbidden()
     }),
     coverImage: Joi.when('coverStatus', {
-        is: Joi.equal(1),
+        is: 1,
         then: Joi.string().allow(null).required(),
         otherwise: Joi.forbidden()
     }),
