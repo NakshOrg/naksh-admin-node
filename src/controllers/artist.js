@@ -8,7 +8,6 @@ const Artist = require('../models/artist');
 const { Types } = require('mongoose');
 const dayjs = require('dayjs');
 
-// ! Wallet data?
 exports.addArtist = asyncHandler(async (req, res, next) => {
 
     if(req.body.hasOwnProperty('wallet')) {
@@ -77,6 +76,10 @@ exports.getAllArtist = asyncHandler(async (req, res, next) => {
 
     if(req.query.hasOwnProperty('createdBy')) {
         filter.createdBy = parseInt(req.query.createdBy);
+    }
+
+    if(req.query.hasOwnProperty('creatorStatus')) {
+        filter.creatorStatus = parseInt(req.query.creatorStatus);
     }
 
     aggregateParams.push({ $match: filter });

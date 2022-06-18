@@ -66,7 +66,8 @@ exports.addArtistBody = Joi.object().keys({
             otherwise: Joi.forbidden()
         })
     })),
-    createdBy: Joi.number().equal(0, 1).default(0)
+    createdBy: Joi.number().equal(0, 1).default(0),
+    creatorStatus: Joi.number().equal(0).default(0)
 
 });
 
@@ -126,7 +127,8 @@ exports.updateArtistBody = Joi.object().keys({
             then: Joi.string().required(),
             otherwise: Joi.forbidden()
         })
-    }))
+    })),
+    creatorStatus: Joi.number().equal(1)
 
 });
 
@@ -140,7 +142,8 @@ exports.getAllArtistQuery = Joi.object().keys({
     state: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     status: Joi.number().equal(0, 1),
     artform: Joi.string().alphanum().length(24),
-    createdBy: Joi.number().equal(0, 1)
+    createdBy: Joi.number().equal(0, 1),
+    creatorStatus: Joi.number().equal(0, 1)
 
 });
 

@@ -8,6 +8,11 @@ const artistSchema = new Schema({
         type: Number
     },
 
+    creatorStatus: {
+        type: Number,
+        default: 0
+    },
+
     image: {
         type: String
     },
