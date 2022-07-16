@@ -2,6 +2,8 @@ const { asyncHandler } = require('../middlewares/asyncHandler');
 
 const { ErrorResponse } = require('../helpers/error');
 
+const Nft = require('../models/nft');
+
 const pinataSDK = require('@pinata/sdk');
 const pinata = pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECRET);
 
@@ -139,4 +141,40 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
 
     });
 
+});
+
+exports.updateTrendingNft = asyncHandler(async (req, res, next) => {
+
+    const nft = await Nft.findOneAndUpdate({ token: req.query.token }, { $inc: { ...req.body } }, { upsert: true, new: true });
+
+    if(!nft) {
+        return next(new ErrorResponse(404, "nft not found"));
+    }
+
+    return res.status(200).send({ nft });
+});
+
+exports.getTrendingNft = asyncHandler(async (req, res, next) => {
+
+    const aggregateParams = [];
+
+    const sortByTrending = {
+        trending: -1
+    };
+
+    aggregateParams.push({ $sort: sortByTrending });
+
+    const limit = 10;
+
+    aggregateParams.push({ $limit: limit });
+    
+    const trendingMatch = {
+        trending: { $gt: 0 }
+    };
+
+    aggregateParams.push({ $match: trendingMatch });
+
+    const nfts = await Nft.aggregate(aggregateParams).collation({locale: "en"});
+
+    return res.status(200).send({ nfts });
 });

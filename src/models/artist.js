@@ -95,6 +95,18 @@ const artistSchema = new Schema({
         type: Number
     },
 
+    nftSale: {
+        type: Number
+    },
+
+    nftView: {
+        type: Number
+    },
+
+    trending: {
+        type: Number
+    },
+
     createdAt: {
         type: Date
     },
@@ -111,6 +123,9 @@ const artistSchema = new Schema({
 ! createdBy:
 0 - admin
 1 - client
+! creatorStatus:
+0 - user
+1 - creator
 */
 
 module.exports = model("Artist", artistSchema, "artists");

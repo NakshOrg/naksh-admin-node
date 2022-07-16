@@ -137,3 +137,59 @@ exports.getOneArtist = asyncHandler(async (req, res, next) => {
 
     return res.status(200).send({ artist });
 });
+
+exports.updateTrendingArtist = asyncHandler(async (req, res, next) => {
+
+    const artist = await Artist.findOneAndUpdate({ _id: req.query.id }, { $inc: { ...req.body } }, { new: true });
+
+    if(!artist) {
+        return next(new ErrorResponse(404, "artist not found"));
+    }
+
+    return res.status(200).send({ artist });
+});
+
+exports.getTrendingArtist = asyncHandler(async (req, res, next) => {
+
+    const aggregateParams = [];
+
+    const sortByTrending = {
+        trending: -1
+    };
+
+    aggregateParams.push({ $sort: sortByTrending });
+
+    const limit = 10;
+
+    aggregateParams.push({ $limit: limit });
+
+    const trendingMatch = {
+        trending: { $gt: 0 }
+    };
+
+    aggregateParams.push({ $match: trendingMatch });
+
+    const artformLookup = {
+        from: "artforms",
+        localField: "artform",
+        foreignField: "_id",
+        as: "artform"
+    };
+
+    aggregateParams.push({ $lookup: artformLookup });
+
+    let artformUnwind = {
+        path: "$artform",
+        preserveNullAndEmptyArrays: true
+    };
+
+    aggregateParams.push({ $unwind: artformUnwind });
+
+    const artists = await Artist.aggregate(aggregateParams).collation({locale: "en"});
+    
+    for(let i = 0; i < artists.length; i++) {
+        await getArtistImages( artists[i] );
+    }
+
+    return res.status(200).send({ artists });
+});
