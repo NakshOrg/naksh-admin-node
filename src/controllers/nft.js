@@ -145,7 +145,7 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
 
 exports.updateTrendingNft = asyncHandler(async (req, res, next) => {
 
-    const nft = await Nft.findOneAndUpdate({ token: req.query.token }, { $inc: { ...req.body } }, { upsert: true, new: true });
+    const nft = await Nft.findOneAndUpdate({ token: req.query.token, blockchain: req.query.blockchain }, { $inc: { ...req.body } }, { upsert: true, new: true });
 
     if(!nft) {
         return next(new ErrorResponse(404, "nft not found"));
