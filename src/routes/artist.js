@@ -7,17 +7,14 @@ const {
     updateArtistQuery,
     updateArtistBody,
     getAllArtistQuery,
-    getOneArtistQuery,
-    updateTrendingArtistQuery,
-    updateTrendingArtistBody
+    getOneArtistQuery
 } = require('../validators/artist');
 
 const {
     addArtist,
     updateArtist,
     getAllArtist,
-    getOneArtist,
-    updateTrendingArtist
+    getOneArtist
 } = require('../controllers/artist');
 
 const { auth, restrictAdmin } = require('../middlewares/auth');
@@ -33,8 +30,5 @@ router.route('/all')
 
 router.route('/get')
 .get( celebrate({ [Segments.QUERY]: getOneArtistQuery }), getOneArtist );
-
-router.route('/trending')
-.patch( celebrate({ [Segments.QUERY]: updateTrendingArtistQuery, [Segments.BODY]: updateTrendingArtistBody }), updateTrendingArtist );
 
 module.exports = router;

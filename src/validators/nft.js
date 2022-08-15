@@ -3,7 +3,8 @@ const { Joi } = require('celebrate');
 exports.updateTrendingNftQuery = Joi.object().keys({
 
     blockchain: Joi.number().equal(0, 1).required(),
-    token: Joi.string().required()
+    token: Joi.string().required(),
+    artist: Joi.string().alphanum().length(24).required()
 
 });
 

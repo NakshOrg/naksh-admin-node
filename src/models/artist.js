@@ -95,11 +95,11 @@ const artistSchema = new Schema({
         type: Number
     },
 
-    nftSale: {
+    sale: {
         type: Number
     },
 
-    nftView: {
+    view: {
         type: Number
     },
 

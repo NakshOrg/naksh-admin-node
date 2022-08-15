@@ -141,24 +141,3 @@ exports.getOneArtist = asyncHandler(async (req, res, next) => {
 
     return res.status(200).send({ artist });
 });
-
-exports.updateTrendingArtist = asyncHandler(async (req, res, next) => {
-
-    const updateBody = { ...req.body };
-    
-    if(req.body.hasOwnProperty("nftSale")) {
-        updateBody.trending = 1;
-    }
-
-    if(req.body.hasOwnProperty("nftView")) {
-        updateBody.trending = 0.5;
-    }
-
-    const artist = await Artist.findOneAndUpdate({ _id: req.query.id }, { $inc: updateBody }, { new: true });
-
-    if(!artist) {
-        return next(new ErrorResponse(404, "artist not found"));
-    }
-
-    return res.status(200).send({ artist });
-});

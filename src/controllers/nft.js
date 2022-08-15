@@ -3,6 +3,7 @@ const { asyncHandler } = require('../middlewares/asyncHandler');
 const { ErrorResponse } = require('../helpers/error');
 
 const Nft = require('../models/nft');
+const Artist = require('../models/artist');
 
 const pinataSDK = require('@pinata/sdk');
 const pinata = pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECRET);
@@ -145,13 +146,22 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
 
 exports.updateTrendingNft = asyncHandler(async (req, res, next) => {
 
-    const nft = await Nft.findOneAndUpdate({ token: req.query.token, blockchain: req.query.blockchain }, { $inc: { ...req.body, trending: 1 } }, { upsert: true, new: true });
-
-    if(!nft) {
-        return next(new ErrorResponse(404, "nft not found"));
+    const artistBody = { ...req.body };
+    
+    if(req.body.hasOwnProperty("sale")) {
+        artistBody.trending = 1;
     }
 
-    return res.status(200).send({ nft });
+    if(req.body.hasOwnProperty("view")) {
+        artistBody.trending = 0.5;
+    }
+
+    const [ artist, nft ] = await Promise.all([
+        Artist.findOneAndUpdate({ _id: req.query.artist }, { $inc: artistBody }, { new: true }),
+        Nft.findOneAndUpdate({ token: req.query.token, blockchain: req.query.blockchain }, { $inc: { ...req.body, trending: 1 } }, { upsert: true, new: true })
+    ]);
+
+    return res.status(200).send({ artist, nft });
 });
 
 exports.getTrendingNft = asyncHandler(async (req, res, next) => {

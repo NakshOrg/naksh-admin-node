@@ -152,16 +152,3 @@ exports.getOneArtistQuery = Joi.object().keys({
     id: Joi.string().alphanum().length(24).required()
 
 });
-
-exports.updateTrendingArtistQuery = Joi.object().keys({
-
-    id: Joi.string().alphanum().length(24).required()
-
-});
-
-exports.updateTrendingArtistBody = Joi.object().keys({
-
-    nftSale: Joi.number().equal(1),
-    nftView: Joi.number().equal(1),
-}).without('nftSale', ['nftView'])
-.without('nftView', ['nftSale']);
