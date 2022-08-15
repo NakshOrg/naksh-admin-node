@@ -10,9 +10,14 @@ exports.updateTrendingNftQuery = Joi.object().keys({
 exports.updateTrendingNftBody = Joi.object().keys({
 
     view: Joi.number().equal(1),
-    sale: Joi.number().equal(1),
-    trending: Joi.equal(1)
+    sale: Joi.number().equal(1)
 
 })
 .without('sale', ['view'])
 .without('view', ['sale']);
+
+exports.getTrendingNftQuery = Joi.object().keys({
+
+    blockchain: Joi.number().equal(0, 1).required()
+
+});

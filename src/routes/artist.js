@@ -17,8 +17,7 @@ const {
     updateArtist,
     getAllArtist,
     getOneArtist,
-    updateTrendingArtist,
-    getTrendingArtist
+    updateTrendingArtist
 } = require('../controllers/artist');
 
 const { auth, restrictAdmin } = require('../middlewares/auth');
@@ -37,8 +36,5 @@ router.route('/get')
 
 router.route('/trending')
 .patch( celebrate({ [Segments.QUERY]: updateTrendingArtistQuery, [Segments.BODY]: updateTrendingArtistBody }), updateTrendingArtist );
-
-router.route('/trending')
-.get( getTrendingArtist );
 
 module.exports = router;

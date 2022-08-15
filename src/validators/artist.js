@@ -134,7 +134,7 @@ exports.updateArtistBody = Joi.object().keys({
 
 exports.getAllArtistQuery = Joi.object().keys({
 
-    sortBy: Joi.string().equal("createdAt", "name").required(),
+    sortBy: Joi.string().equal("createdAt", "name", "trending").required(),
     sort: Joi.number().equal(1,-1).required(),
     search: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     wallet: Joi.string().pattern(walletRegex, walletRegexName),
@@ -163,12 +163,5 @@ exports.updateTrendingArtistBody = Joi.object().keys({
 
     nftSale: Joi.number().equal(1),
     nftView: Joi.number().equal(1),
-    trending: Joi.when('nftSale', {
-        is: Joi.exist(),
-        then: Joi.equal(1).required()
-    }).when('nftView', {
-        is: Joi.exist(),
-        then: Joi.equal(0.5).required()
-    }),
 }).without('nftSale', ['nftView'])
 .without('nftView', ['nftSale']);
