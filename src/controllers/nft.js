@@ -22,7 +22,11 @@ const Jimp = require('jimp');
 
 exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
 
+    console.log("START CON");
+
     uploadFile(req, res, async (err) => {
+
+        console.log("UPLOAD 1");
 
         if (err instanceof multer.MulterError) {
           // A Multer error occurred when uploading.
@@ -33,26 +37,38 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
           console.log({ "two": err });
           return next(new ErrorResponse(400, err.message ));
         }
+
+        console.log("UPLOAD 2");
     
         // Everything went fine.
 
         if(req.files.nftImage.length == 0) {
             return next(new ErrorResponse(400, "NFT image required"));
         }
+
+        console.log("UPLOAD 3");
     
         const auth = await pinata.testAuthentication();
+
+        console.log("UPLOAD 4");
     
         if(auth.authenticated != true) {
             return next(new ErrorResponse(503, "server could not reach IPFS storage"));
         }
+
+        console.log("UPLOAD 5");
     
         let nftImageUrl = "";
         let nftThumbnailUrl = "";
         let custom = [];
     
         for(let nftImage of req.files.nftImage) {
+
+            console.log("UPLOAD 6");
     
             const readableStreamForNFT = fs.createReadStream(nftImage.path);
+
+            console.log("UPLOAD 7");
     
             const optionsNFT = {
                 pinataMetadata: {
@@ -68,6 +84,8 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
             };
     
             const uploadNFT = await pinata.pinFileToIPFS(readableStreamForNFT, optionsNFT);
+
+            console.log("UPLOAD 8");
     
             if(uploadNFT.IpfsHash == (undefined || null || "")) {
                 return next(new ErrorResponse(400, "error uploading nft file to IPFS storage"));
@@ -76,9 +94,16 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
             nftImageUrl = `${process.env.PINATA_PREVIEW_URL}${uploadNFT.IpfsHash}`;
             
             const uncompressedImage = await Jimp.read(nftImage.path);
+
+            console.log("UPLOAD 9");
+
             await uncompressedImage.quality(10).writeAsync(nftImage.path);
 
+            console.log("UPLOAD 10");
+
             const readableStreamForThumbnail = fs.createReadStream(nftImage.path);
+
+            console.log("UPLOAD 11");
     
             const optionsThumbnail = {
                 pinataMetadata: {
@@ -94,6 +119,8 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
             };
     
             const uploadThumbnail = await pinata.pinFileToIPFS(readableStreamForThumbnail, optionsThumbnail);
+
+            console.log("UPLOAD 12");
     
             if(uploadThumbnail.IpfsHash == (undefined || null || "")) {
                 return next(new ErrorResponse(400, "error uploading nft file to IPFS storage"));
@@ -102,12 +129,20 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
             nftThumbnailUrl = `${process.env.PINATA_PREVIEW_URL}${uploadThumbnail.IpfsHash}`;
     
             fs.unlinkSync(nftImage.path);
+
+            console.log("UPLOAD 13");
             
         }
 
+        console.log("UPLOAD 14");
+
         if( Array.isArray(req.files.custom) ) {
 
+            console.log("UPLOAD 15");
+
             for(let customImage of req.files.custom) {
+
+                console.log("UPLOAD 16");
     
                 const readableStreamForFile = fs.createReadStream(customImage.path);
         
@@ -124,6 +159,8 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
                         cidVersion: 0
                     }
                 };
+
+                console.log("UPLOAD 17");
         
                 const upload = await pinata.pinFileToIPFS(readableStreamForFile, options);
         
@@ -132,15 +169,27 @@ exports.uploadImageToIPFS = asyncHandler( async (req, res, next) => {
                 }
         
                 custom.push(`${process.env.PINATA_PREVIEW_URL}${upload.IpfsHash}`);
+
+                console.log("UPLOAD 18");
         
                 fs.unlinkSync(customImage.path);
+
+                console.log("UPLOAD 19");
             }
 
+            console.log("UPLOAD 20");
+
         }
+
+        console.log("UPLOAD 21");
         
         return res.status(200).send({ nftImageUrl, nftThumbnailUrl, custom });
 
+        console.log("UPLOAD 22");
+
     });
+
+    console.log("END CON");
 
 });
 
