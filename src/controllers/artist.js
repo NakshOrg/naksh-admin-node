@@ -141,3 +141,27 @@ exports.getOneArtist = asyncHandler(async (req, res, next) => {
 
     return res.status(200).send({ artist });
 });
+
+exports.getNftArtists = asyncHandler(async (req, res, next) => {
+
+    const artformPopulate = {
+        path: "artform",
+        model: "Artform"
+    };
+
+    const organizationPopulate = {
+        path: "organization",
+        model: "Organization"
+    };
+
+    const [ artist, owner ] = await Promise.all([
+        Artist.findOne({ wallet: req.query.artist }).populate(artformPopulate).populate(organizationPopulate),
+        Artist.findOne({ wallet: req.query.owner }).populate(artformPopulate).populate(organizationPopulate)
+    ]);
+
+    await getArtistImages( artist );
+
+    await getArtistImages( owner );
+
+    return res.status(200).send({ artist, owner });
+});

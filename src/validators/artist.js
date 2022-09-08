@@ -152,3 +152,10 @@ exports.getOneArtistQuery = Joi.object().keys({
     id: Joi.string().alphanum().length(24).required()
 
 });
+
+exports.getNftArtistsQuery = Joi.object().keys({
+
+    artist: Joi.string().alphanum().length(24).required(),
+    owner: Joi.string().alphanum().length(24).required()
+
+});
