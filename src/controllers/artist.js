@@ -159,9 +159,13 @@ exports.getNftArtists = asyncHandler(async (req, res, next) => {
         Artist.findOne({ wallet: req.query.owner }).populate(artformPopulate).populate(organizationPopulate)
     ]);
 
-    await getArtistImages( artist );
+    if(artist) {
+        await getArtistImages( artist );
+    }
 
-    await getArtistImages( owner );
+    if(owner) {
+        await getArtistImages( owner );
+    }
 
     return res.status(200).send({ artist, owner });
 });
