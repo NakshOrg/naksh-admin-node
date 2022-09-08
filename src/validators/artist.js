@@ -155,7 +155,7 @@ exports.getOneArtistQuery = Joi.object().keys({
 
 exports.getNftArtistsQuery = Joi.object().keys({
 
-    artist: Joi.string().alphanum().length(24).required(),
-    owner: Joi.string().alphanum().length(24).required()
+    artist: Joi.string().pattern(walletRegex, walletRegexName).required(),
+    owner: Joi.string().pattern(walletRegex, walletRegexName).required(),
 
 });
