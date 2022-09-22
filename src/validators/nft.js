@@ -8,14 +8,14 @@ exports.updateTrendingNftQuery = Joi.object().keys({
 
 });
 
-exports.updateTrendingNftBody = Joi.object().keys({
+exports.updateTrendingNftBody = Joi
+.object() .keys({
 
     view: Joi.number().equal(1),
     sale: Joi.number().equal(1)
 
 })
-.without('sale', ['view'])
-.without('view', ['sale']);
+.xor('sale', 'view');
 
 exports.getTrendingNftQuery = Joi.object().keys({
 
