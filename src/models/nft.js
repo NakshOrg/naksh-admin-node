@@ -22,12 +22,19 @@ const nftSchema = new Schema({
         type: Number
     },
 
+    block: {
+        type: Number
+    },
+
 });
 
 /*
 ! blockchain:
 0 - Near
-1 - Harmony
+1 - Polygon
+! block
+0 - active
+1 - blocked
 */
 
 module.exports = model("Nft", nftSchema, "nfts");

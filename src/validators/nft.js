@@ -8,8 +8,7 @@ exports.updateTrendingNftQuery = Joi.object().keys({
 
 });
 
-exports.updateTrendingNftBody = Joi
-.object() .keys({
+exports.updateTrendingNftBody = Joi.object().keys({
 
     view: Joi.number().equal(1),
     sale: Joi.number().equal(1)
@@ -20,5 +19,17 @@ exports.updateTrendingNftBody = Joi
 exports.getTrendingNftQuery = Joi.object().keys({
 
     blockchain: Joi.number().equal(0, 1).required()
+
+});
+
+exports.blockNftQuery = Joi.object().keys({
+
+    token: Joi.string().required()
+
+});
+
+exports.blockNftBody = Joi.object().keys({
+
+    block: Joi.number().equal(0, 1).required()
 
 });
