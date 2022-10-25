@@ -7,6 +7,7 @@ const Artist = require('../models/artist');
 
 const { Types } = require('mongoose');
 const dayjs = require('dayjs');
+const { ethers } = require("ethers");
 
 exports.addArtist = asyncHandler(async (req, res, next) => {
 
@@ -15,6 +16,10 @@ exports.addArtist = asyncHandler(async (req, res, next) => {
         if(exist) {
             return next(new ErrorResponse(404, "wallet already associated with another artist"));
         }
+    }
+
+    if( !req.body.wallet.match(/^.+\.(near|testnet)$/) && !ethers.utils.isAddress(req.body.wallet) ) {
+        return next(new ErrorResponse(400, "Invalid wallet address"));
     }
 
     const artist = await new Artist({ ...req.body, status: 0, createdAt: dayjs().toDate() }).save();
