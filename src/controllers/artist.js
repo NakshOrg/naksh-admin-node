@@ -174,3 +174,29 @@ exports.getNftArtists = asyncHandler(async (req, res, next) => {
 
     return res.status(200).send({ artist, owner });
 });
+
+exports.saveNft = asyncHandler(async (req, res, next) => {
+
+    const artist = await Artist.findOneAndUpdate({ _id: req.query.id }, { $addToSet: { savedNft: req.body } }, { new: true });
+
+    if(!artist) {
+        return next(new ErrorResponse(404, "artist not found"));
+    }
+
+    await getArtistImages( artist );
+
+    return res.status(200).send({ artist });
+});
+
+exports.unsaveNft = asyncHandler(async (req, res, next) => {
+
+    const artist = await Artist.findOneAndUpdate({ _id: req.query.id }, { $pull: { savedNft: req.body } }, { new: true });
+
+    if(!artist) {
+        return next(new ErrorResponse(404, "artist not found"));
+    }
+
+    await getArtistImages( artist );
+
+    return res.status(200).send({ artist });
+});

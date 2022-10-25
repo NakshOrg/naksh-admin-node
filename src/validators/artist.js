@@ -162,3 +162,31 @@ exports.getNftArtistsQuery = Joi.object().keys({
     owner: Joi.string().required(),
 
 });
+
+exports.saveNftQuery = Joi.object().keys({
+
+    id: Joi.string().alphanum().length(24).required()
+
+});
+
+exports.saveNftBody = Joi.object().keys({
+
+    blockchain: Joi.number().equal(0, 1).required(),
+    token: Joi.string().required(),
+    address: Joi.string().required(),
+
+});
+
+exports.unsaveNftQuery = Joi.object().keys({
+
+    id: Joi.string().alphanum().length(24).required()
+
+});
+
+exports.unsaveNftBody = Joi.object().keys({
+
+    blockchain: Joi.number().equal(0, 1).required(),
+    token: Joi.string().required(),
+    address: Joi.string().required(),
+
+});

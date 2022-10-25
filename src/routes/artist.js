@@ -8,7 +8,11 @@ const {
     updateArtistBody,
     getAllArtistQuery,
     getOneArtistQuery,
-    getNftArtistsQuery
+    getNftArtistsQuery,
+    saveNftQuery,
+    saveNftBody,
+    unsaveNftQuery,
+    unsaveNftBody
 } = require('../validators/artist');
 
 const {
@@ -16,7 +20,9 @@ const {
     updateArtist,
     getAllArtist,
     getOneArtist,
-    getNftArtists
+    getNftArtists,
+    saveNft,
+    unsaveNft
 } = require('../controllers/artist');
 
 const { auth, restrictAdmin } = require('../middlewares/auth');
@@ -41,5 +47,11 @@ router.route('/get')
 
 router.route('/nft')
 .get( celebrate({ [Segments.QUERY]: getNftArtistsQuery }), getNftArtists );
+
+router.route('/saveNft')
+.patch( celebrate({ [Segments.BODY]: saveNftBody }), saveNft )
+
+router.route('/unsaveNft')
+.patch( celebrate({ [Segments.BODY]: unsaveNftBody }), unsaveNft );
 
 module.exports = router;
