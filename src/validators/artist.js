@@ -138,7 +138,7 @@ exports.getAllArtistQuery = Joi.object().keys({
     sortBy: Joi.string().equal("createdAt", "name", "trending").required(),
     sort: Joi.number().equal(1,-1).required(),
     search: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
-    wallet: Joi.string().pattern(walletRegex, walletRegexName),
+    wallet: Joi.string(),
     id: Joi.string().alphanum().length(24),
     state: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     status: Joi.number().equal(0, 1),
@@ -156,7 +156,7 @@ exports.getOneArtistQuery = Joi.object().keys({
 
 exports.getNftArtistsQuery = Joi.object().keys({
 
-    artist: Joi.string().pattern(walletRegex, walletRegexName).required(),
-    owner: Joi.string().pattern(walletRegex, walletRegexName).required(),
+    artist: Joi.string().required(),
+    owner: Joi.string().required(),
 
 });
