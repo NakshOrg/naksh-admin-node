@@ -22,10 +22,16 @@ const {
 const { auth, restrictAdmin } = require('../middlewares/auth');
 
 router.route('/add')
-.post( celebrate({ [Segments.BODY]: addArtistBody }), auth, restrictAdmin, addArtist );
+.post( celebrate({ [Segments.BODY]: addArtistBody }),
+// auth,
+// restrictAdmin,
+addArtist );
 
 router.route('/update')
-.patch( celebrate({ [Segments.QUERY]: updateArtistQuery, [Segments.BODY]: updateArtistBody }), auth, restrictAdmin, updateArtist );
+.patch( celebrate({ [Segments.QUERY]: updateArtistQuery, [Segments.BODY]: updateArtistBody }),
+//  auth,
+// restrictAdmin,
+updateArtist );
 
 router.route('/all')
 .get( celebrate({ [Segments.QUERY]: getAllArtistQuery }), getAllArtist );

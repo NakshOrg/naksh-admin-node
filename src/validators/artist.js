@@ -30,7 +30,7 @@ exports.addArtistBody = Joi.object().keys({
         then: Joi.string().allow(null).required(),
         otherwise: Joi.forbidden()
     }),
-    name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName).required(),
+    name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName), //.required(),
     description: Joi.string(),
     artform: Joi.string().alphanum().length(24),
     organization: Joi.string().alphanum().length(24),
@@ -99,7 +99,7 @@ exports.updateArtistBody = Joi.object().keys({
     city: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     phone: Joi.string().pattern(phoneNumberRegex, phoneNumberRegexName),
     email: Joi.string().email(emailOptions),
-    wallet: Joi.string().pattern(walletRegex, walletRegexName),
+    // wallet: Joi.string().pattern(walletRegex, walletRegexName),
     website: Joi.string().pattern(websiteRegex, websiteRegexName),
     facebook: Joi.string().pattern(facebookRegex, facebookRegexName),
     instagram: Joi.string().pattern(instagramRegex, instagramRegexName),
