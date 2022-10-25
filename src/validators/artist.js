@@ -129,6 +129,8 @@ exports.updateArtistBody = Joi.object().keys({
             otherwise: Joi.forbidden()
         })
     })),
+
+    savedNft: Joi.array().items(Joi.string()),
     creatorStatus: Joi.number().equal(1)
 
 });

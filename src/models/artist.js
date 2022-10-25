@@ -107,6 +107,12 @@ const artistSchema = new Schema({
         type: Number
     },
 
+    savedNft: [
+        {
+            type: String
+        }
+    ],
+
     createdAt: {
         type: Date
     },
