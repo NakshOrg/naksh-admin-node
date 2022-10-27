@@ -89,6 +89,11 @@ const artistSchema = new Schema({
         trim: true
     },
 
+    twitter: {
+        type: String,
+        trim: true
+    },
+
     custom: [ customSchema ],
 
     status: {

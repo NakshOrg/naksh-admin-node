@@ -16,6 +16,9 @@ exports.facebookRegexName = 'https://www.facebook.com/ or https://m.facebook.com
 exports.instagramRegex = /^https:\/\/(www\.|m\.)?instagram\.com\/.+$/;
 exports.instagramRegexName = 'https://www.instagram.com/ or https://m.instagram.com/ or https://instagram.com/';
 
+exports.twitterRegex = /^https:\/\/(www\.)?twitter\.com\/.+$/;
+exports.twitterRegexName = 'https://www.twitter.com/ or https://twitter.com/';
+
 exports.emailOptions = {
     maxDomainSegments: 2
 };

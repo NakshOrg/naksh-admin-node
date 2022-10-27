@@ -13,6 +13,8 @@ const {
     facebookRegexName,
     instagramRegex,
     instagramRegexName,
+    twitterRegex,
+    twitterRegexName,
     emailOptions
 } = require('./validatorOptions');
 
@@ -43,6 +45,7 @@ exports.addArtistBody = Joi.object().keys({
     website: Joi.string().pattern(websiteRegex, websiteRegexName),
     facebook: Joi.string().pattern(facebookRegex, facebookRegexName),
     instagram: Joi.string().pattern(instagramRegex, instagramRegexName),
+    twitter: Joi.string().pattern(twitterRegex, twitterRegexName),
     custom: Joi.array().items(Joi.object().keys({
         type: Joi.number().equal(0,1,2).required(),
         name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName).required(),
@@ -104,6 +107,7 @@ exports.updateArtistBody = Joi.object().keys({
     website: Joi.string().pattern(websiteRegex, websiteRegexName),
     facebook: Joi.string().pattern(facebookRegex, facebookRegexName),
     instagram: Joi.string().pattern(instagramRegex, instagramRegexName),
+    twitter: Joi.string().pattern(twitterRegex, twitterRegexName),
     status: Joi.number().equal(0, 1),
     custom: Joi.array().items(Joi.object().keys({
         type: Joi.number().equal(0,1,2).required(),
