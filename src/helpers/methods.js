@@ -18,7 +18,8 @@ exports.getOrganizationImages = asyncHandler(async ( organization ) => {
 exports.getArtistImages = asyncHandler(async ( artist ) => {
 
     if( artist.image && artist.image != null ) {
-        artist.image = await s3GetUrl(artist.image);
+        // artist.image = await s3GetUrl(artist.image);
+        artist.image = `https://naksh-dev.s3.ap-south-1.amazonaws.com/${artist.image}`;
     }
     
     if( artist.coverImage && artist.coverImage != null ) {
