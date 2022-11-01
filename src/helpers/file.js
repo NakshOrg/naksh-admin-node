@@ -54,6 +54,45 @@ exports.s3PutUrl = asyncHandler(async ( module, totalFiles ) => {
 
 });
 
+exports.s3ArtistPutUrl = asyncHandler(async ( module, artist, totalFiles ) => {
+
+    let putUrlArray = [];
+
+    let s3Result;
+
+    let params = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Expires: 300
+    };
+
+    for(let i = 0; i < totalFiles; i++) {
+
+        params.Key = `${module}/${artist}`;
+
+        s3Result = await new Promise((resolve, reject) => {
+            s3.getSignedUrl('putObject', params, (err, url) => {
+                if(err) {
+                    logger.error(err, "AWS PUT ERROR");
+                    resolve({
+                        err: err.message
+                    });
+                } else {
+                    resolve({
+                        Key: params.Key,
+                        url
+                    });
+                }
+            });
+        });
+
+        putUrlArray.push( s3Result );
+
+    }
+
+    return putUrlArray;
+
+});
+
 exports.s3GetUrl = asyncHandler(async ( file ) => {
 
     let params = {
