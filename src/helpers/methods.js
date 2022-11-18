@@ -19,7 +19,6 @@ exports.getArtistImages = asyncHandler(async ( artist ) => {
 
     if( artist.image && artist.image != null ) {
         // artist.image = await s3GetUrl(artist.image);
-        artist.image = `${process.env.S3_OBJECT_URL}${artist.image}`;
     }
     
     if( artist.coverImage && artist.coverImage != null ) {
@@ -31,4 +30,16 @@ exports.getArtistImages = asyncHandler(async ( artist ) => {
             artist.custom[i].fileUrl = await s3GetUrl(artist.custom[i].fileKey);
         }
     }
+});
+
+exports.getCollectionImages = asyncHandler(async ( collection ) => {
+
+    if( collection.image && collection.image != null ) {
+        collection.image = await s3GetUrl(collection.image);
+    }
+    
+    if( collection.coverImage && collection.coverImage != null ) {
+        collection.coverImage = await s3GetUrl(collection.coverImage);
+    }
+    
 });

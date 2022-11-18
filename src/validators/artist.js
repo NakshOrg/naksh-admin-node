@@ -32,7 +32,7 @@ exports.addArtistBody = Joi.object().keys({
         then: Joi.string().allow(null).required(),
         otherwise: Joi.forbidden()
     }),
-    name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName), //.required(),
+    name: Joi.string().pattern(alphaNumSpaceRegex, alphaNumSpaceRegexName),
     description: Joi.string(),
     artform: Joi.string().alphanum().length(24),
     organization: Joi.string().alphanum().length(24),
@@ -177,7 +177,7 @@ exports.saveNftBody = Joi.object().keys({
 
     blockchain: Joi.number().equal(0, 1).required(),
     token: Joi.string().required(),
-    address: Joi.string().required(),
+    address: Joi.string(),
 
 });
 
@@ -191,6 +191,6 @@ exports.unsaveNftBody = Joi.object().keys({
 
     blockchain: Joi.number().equal(0, 1).required(),
     token: Joi.string().required(),
-    address: Joi.string().required(),
+    address: Joi.string(),
 
 });
