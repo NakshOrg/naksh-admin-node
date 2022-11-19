@@ -19,6 +19,7 @@ exports.getArtistImages = asyncHandler(async ( artist ) => {
 
     if( artist.image && artist.image != null ) {
         // artist.image = await s3GetUrl(artist.image);
+        artist.image = `${process.env.S3_OBJECT_URL}${artist.image}`;
     }
     
     if( artist.coverImage && artist.coverImage != null ) {
