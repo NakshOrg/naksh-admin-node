@@ -71,7 +71,8 @@ const artistSchema = new Schema({
 
     wallet: {
         type: String,
-        trim: true
+        trim: true,
+        unique: true
     },
 
     website: {
