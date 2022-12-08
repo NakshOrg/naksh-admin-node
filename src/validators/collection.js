@@ -104,6 +104,7 @@ exports.addActivityToCollectionQuery = Joi.object().keys({
 
 exports.addActivityToCollectionBody = Joi.object().keys({
 
+    wallet: Joi.string().required(),
     message: Joi.string().required(),
     amount: Joi.number()
 

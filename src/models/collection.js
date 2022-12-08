@@ -72,6 +72,10 @@ const collectionSchema = new Schema({
 
     activity: [{
 
+        wallet: {
+            type: String
+        },
+
         message: {
             type: String
         },
