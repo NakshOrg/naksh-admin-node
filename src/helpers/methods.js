@@ -42,5 +42,9 @@ exports.getCollectionImages = asyncHandler(async ( collection ) => {
     if( collection.coverImage && collection.coverImage != null ) {
         collection.coverImage = await s3GetUrl(collection.coverImage);
     }
+
+    if( typeof collection.artist === "object" && collection.artist.image != null ) {
+        collection.artist.image = await s3GetUrl(collection.artist.image);
+    }
     
 });
