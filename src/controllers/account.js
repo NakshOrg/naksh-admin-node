@@ -23,6 +23,13 @@ const path = require('path');
 const pinataSDK = require('@pinata/sdk');
 const pinata = pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECRET);
 
+const axios = require('axios').default;
+const { parse } = require("node-html-parser");
+const axiosInstance = axios.create({
+    baseURL: `https://api.lu.ma/profile`,
+    timeout: 3000
+});
+
 exports.connectWallet = asyncHandler( async (req, res, next) => {
 
     return res.status(200).send({ data: "Something" });
@@ -342,5 +349,48 @@ exports.verifyOtp = asyncHandler( async (req, res, next) => {
     const token = jwt.sign({ _id: admin._id.toString(), userType: 0 }, process.env.JWT_SECRET );
 
     return res.status(200).send({ login: true, token: `Bearer ${token}` });
+
+});
+
+exports.lumaWebScrape = asyncHandler(async (req, res, next) => {
+
+    let response = await axiosInstance.get('?host_api_id=usr-hzW4RWAY0WDRlX3');
+
+    const data = response.data;
+
+    let events = [];
+    
+    for(let event of data.events.reverse()) {
+        let eventObj = {};
+        eventObj.name = event.name? event.name : null;
+        eventObj.cover = event.cover_url? event.cover_url : null;
+        eventObj.description = "";
+        event.description_mirror?.content?.forEach(description => {
+            if(description.type == "paragraph") {
+                description.content?.forEach(content => {
+                    if(content.type == "text") {
+                        eventObj.description += content.text;
+                    }
+                    if(content.type == "hard_break") {
+                        eventObj.description += "\n";
+                    }
+                });
+            } else {
+                eventObj.description += null;
+            }
+            eventObj.description += "\n";
+        });
+        eventObj.start = event.start_at? event.start_at : null;
+        eventObj.end = event.end_at? event.end_at : null;
+        eventObj.city = event.geo_address_info?.city ? event.geo_address_info.city : null;
+        eventObj.state = event.geo_address_info?.region ? event.geo_address_info.region : null;
+        eventObj.country = event.geo_address_info?.country ? event.geo_address_info.country : null;
+        eventObj.type = event.location_type ? event.location_type : null;
+        eventObj.ongoing = dayjs().isBefore(dayjs(event.end_at)) ? true : false;
+        eventObj.url = event.url ? `https://lu.ma/${event.url}` : null;
+        events.push(eventObj);
+    }
+
+    res.status(200).json({ events });
 
 });

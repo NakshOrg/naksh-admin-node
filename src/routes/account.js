@@ -6,6 +6,7 @@ const {
     login,
     verifyOtp,
     accountDetails,
+    lumaWebScrape
 } = require('../controllers/account');
 
 const {
@@ -22,5 +23,8 @@ router.route('/verify')
 
 router.route('/details')
 .get( accountDetails );
+
+router.route('/luma')
+.get( lumaWebScrape );
 
 module.exports = router;
