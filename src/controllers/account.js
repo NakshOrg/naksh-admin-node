@@ -9,6 +9,8 @@ const crypto = require('crypto');
 const dayjs = require('dayjs');
 
 const Admin = require('../models/admin');
+const TPGSubscriber = require('../models/TPGSubscriber');
+const TPGAdmin = require('../models/TPGAdmin');
 
 const { Wallet, Chain, Network } = require('mintbase');
 
@@ -320,7 +322,7 @@ exports.login = asyncHandler( async (req, res, next) => {
 
     const payload = `Naksh OTP for login is ${otp}. It will expire in 5 minutes.`;
 
-    const email = await sendEmail( req.body.email, subject, payload );
+    const email = await sendEmail( process.env.NAKSH_ADMIN_EMAIL, req.body.email, subject, payload, undefined );
 
     return res.status(200).send({
 
@@ -393,4 +395,226 @@ exports.lumaWebScrape = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({ events });
 
+});
+
+exports.subscribeToTPGNewsletter = asyncHandler(async (req, res, next) => {
+
+    const exist = await TPGSubscriber.findOne({ ...req.body });
+
+    if(exist) {
+
+        return res.status(200).send({
+
+            message: "You have already subscribed to our newsletter"
+    
+        });
+    }
+
+    await new TPGSubscriber({ ...req.body, createdAt: dayjs().toDate() }).save();
+
+    const subject = "Welcome to The Phoenix Guild!";
+
+    const payload = `
+    Dear User,
+    
+    Thank you for subscribing to The Phoenix Guild newsletter. We're excited to have you on board!
+    
+    Here's what you can expect from our newsletter:
+    
+    1. Exciting Updates: Stay in the loop with the latest news, workshops, events, and company updates.
+    
+    2. Exclusive Content: Get access to exclusive articles, how-tos, and resources delivered right to your inbox.
+    
+    3. Special Offers: Be the first to know about our promotions, discounts, and special offers.
+    
+    4. Community: Join our thriving community of subscribers and engage in discussions, feedback, and more.
+    
+    We promise not to flood your inbox with emails. You'll receive our newsletter once a week, and we'll make sure it's worth your while.
+    
+    If you ever have any questions, feedback, or suggestions, please don't hesitate to reach out to us. We value your input!
+    
+    Thanks again for joining us. We're looking forward to a fantastic journey together.
+    
+    Best regards,
+    The Phoenix Guild
+    Website: www.thephoenixguild.org
+    Contact Email: admin@naksh.org
+    Twitter: @PhoenixGuildHQ
+    `;
+
+    const htmlPayload = `
+    <html>
+        <head>
+            <style>
+            body {
+                font-family: 'Comic Sans MS', cursive, sans-serif;
+                background-color: #f5f5f5;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                background-color: #FFFFFF; /* background color */
+                border-radius: 10px;
+                border: 2px solid #3e125b; /* border color */
+                padding: 20px;
+                margin: 20px;
+            }
+            .header {
+                background-image: url('https://pbs.twimg.com/profile_banners/1479033772091719682/1663772858/1500x500');
+                background-size: cover;
+                background-color: #0D1039; /* Fallback blue background */
+                color: #EF7131;
+                text-align: center;
+                padding: 10px;
+                border-radius: 8px 8px 0 0;
+            }
+            .content {
+                padding: 20px;
+                color: #1e1842; /* text color */
+                font-size: 16px; /* font size */
+            }
+            .content a {
+                color: #EF7131; /* Change link color to orange */
+                text-decoration: none; /* Remove underline from links */
+            }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+            <div class="header">
+                <h1><b>Welcome to The Phoenix Guild Newsletter!</b></h1>
+            </div>
+            <div class="content">
+                <p>
+                Thank you for <b>subscribing</b> to The Phoenix Guild newsletter. We're excited to have you on board!
+                </p>
+                <p>
+                Here's what you can expect from our newsletter:
+                </p>
+                <ul>
+                <li><b>Exciting Updates:</b> Stay in the loop with the latest news, workshops, events, and company updates.</li>
+                <li><b>Exclusive Content:</b> Get access to exclusive articles, how-tos, and resources delivered right to your inbox.</li>
+                <li><b>Special Offers:</b> Be the first to know about our promotions, discounts, and special offers.</li>
+                <li><b>Community:</b> Join our thriving community of subscribers and engage in discussions, feedback, and more.</li>
+                </ul>
+                <p>
+                We promise not to flood your inbox with emails. You'll receive our newsletter <b>once a week</b>, and we'll make sure it's worth your while.
+                </p>
+                <p>
+                If you ever have any questions, feedback, or suggestions, please don't hesitate to reach out to us. We value your input!
+                </p>
+                <p>
+                Thanks again for joining us. We're looking forward to a <b>fantastic journey</b> together.
+                </p>
+                <p>
+                <b>Best regards,</b>
+                </p>
+                <p>
+                <b>The Phoenix Guild</b><br>
+                Visit our website: <a href="https://www.thephoenixguild.org/"><b>www.thephoenixguild.org</b></a><br>
+                Contact us anytime at: <a href="mailto:getintouch.tpg@gmail.com?subject=Re:%20TPG%20Newsletter"><b>getintouch.tpg@gmail.com</b></a><br>
+                Follow us on Twitter: <a href="https://twitter.com/PhoenixGuildHQ"><b>@PhoenixGuildHQ</b></a>
+                </p>
+            </div>
+            </div>
+        </body>
+    </html>
+    `;
+
+    const email = await sendEmail( process.env.TPG_GET_IN_TOUCH_EMAIL, req.body.email, subject, payload, htmlPayload );
+
+    return res.status(200).send({
+
+        message: "You have successfully subscribed to our newsletter"
+
+    });
+});
+
+exports.loginTPG = asyncHandler( async (req, res, next) => {
+
+    const otp = otpGenerator.generate(6, { digits: true, alphabets: false, upperCase: false, specialChars: false }).toString('hex');
+    const hashedOtp = crypto.createHash('sha256').update(otp).digest('hex');
+    const otpExpiry = dayjs().add(5, 'minute').toDate();
+
+    const tpgAdmin = await TPGAdmin.findOneAndUpdate(
+        { email: process.env.TPG_GET_IN_TOUCH_EMAIL },
+        {
+            otp: hashedOtp,
+            otpExpiry,
+            createdAt: dayjs().toDate()
+        },
+        { upsert: true, new: true }
+    );
+
+    const subject = "TPG login request";
+
+    const payload = `TPG OTP for login is ${otp}. It will expire in 5 minutes.`;
+
+    const email = await sendEmail( process.env.NAKSH_ADMIN_EMAIL, process.env.TPG_GET_IN_TOUCH_EMAIL, subject, payload, undefined );
+
+    return res.status(200).send({
+
+        email
+
+    });
+
+});
+
+exports.getAllTPGNewsletterSubscribers = asyncHandler(async (req, res, next) => {
+    
+    const otp = crypto.createHash('sha256').update(req.params.otp).digest('hex');
+
+    const tpgAdmin = await TPGAdmin.findOneAndUpdate({ otp , otpExpiry: { $gt: dayjs().toDate() } }, { $unset:{ otp: "", otpExpiry: "" } }, { new: true });
+
+    if(!tpgAdmin) {
+        return next(new ErrorResponse(401, 'invalid or expired OTP'));
+    }
+
+    const subscribers = await TPGSubscriber.find();
+
+    let subscribersList = "";
+
+    for(let subscriber of subscribers) {
+        subscribersList += `${subscriber.email},`;
+    }
+
+    return res.status(200).send(subscribersList);
+});
+
+exports.sendTPGFeedback = asyncHandler(async (req, res, next) => {
+
+    const subject = `Business Enquiry: ${req.body.name}`;
+
+    const payload = `
+
+    From: ${req.body.name},
+    
+    Contact: ${req.body.email},
+    
+    Message: ${req.body.message}
+    
+    `;
+
+    const htmlPayload = undefined;
+
+    let toEmail;
+
+    switch(req.query.location) {
+        case 'chennai':
+            toEmail = req.body.email;
+            break;
+        case 'bangalore':
+            toEmail = req.body.email;
+            break;
+        default:
+            toEmail = req.body.email;
+    }
+
+    const email = await sendEmail( process.env.TPG_GET_IN_TOUCH_EMAIL, toEmail, subject, payload, htmlPayload );
+
+    return res.status(200).send({
+
+        message: "Thank you for reaching out to us! We will get back to you."
+
+    });
 });

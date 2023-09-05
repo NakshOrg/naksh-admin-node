@@ -14,10 +14,10 @@ const ses = new aws.SES({
     }
 });
 
-exports.sendEmail = asyncHandler(async (to, subject, payload) => {
+exports.sendEmail = async (from, to, subject, payload, htmlPayload) => {
 
     let params = {
-        Source: process.env.FROM_EMAIL,
+        Source: from,
         Destination: {
             ToAddresses: [ to ]
         },
@@ -33,8 +33,15 @@ exports.sendEmail = asyncHandler(async (to, subject, payload) => {
         }
     };
 
+    if(htmlPayload) {
+        params.Message.Body.Html = {
+            Charset: 'UTF-8',
+            Data: htmlPayload
+        };
+    }
+
     const data = await ses.sendEmail(params);
 
     return data;
 
-});
+};
