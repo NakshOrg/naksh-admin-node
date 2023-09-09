@@ -600,14 +600,38 @@ exports.sendTPGFeedback = asyncHandler(async (req, res, next) => {
     let toEmail;
 
     switch(req.query.location) {
-        case 'chennai':
-            toEmail = req.body.email;
+        case 'delhi':
+            toEmail = process.env.DELHI_TPG_EMAIL;
             break;
-        case 'bangalore':
-            toEmail = req.body.email;
+        case 'jaipur':
+            toEmail = process.env.JAIPUR_TPG_EMAIL;
+            break;
+        case 'kolkata':
+            toEmail = process.env.KOLKATA_TPG_EMAIL;
+            break;
+        case 'pune':
+            toEmail = process.env.PUNE_TPG_EMAIL;
+            break;
+        case 'bhopal':
+            toEmail = process.env.BHOPAL_TPG_EMAIL;
+            break;
+        case 'hyderabad':
+            toEmail = process.env.HYDERABAD_TPG_EMAIL;
+            break;
+        case 'chennai':
+            toEmail = process.env.CHENNAI_TPG_EMAIL;
+            break;
+        case 'kerala':
+            toEmail = process.env.KERALA_TPG_EMAIL;
+            break;
+        case 'karnataka':
+            toEmail = process.env.KARNATAKA_TPG_EMAIL;
+            break;
+        case 'main':
+            toEmail = process.env.MAIN_TPG_EMAIL;
             break;
         default:
-            toEmail = req.body.email;
+            toEmail = process.env.MAIN_TPG_EMAIL;
     }
 
     const email = await sendEmail( process.env.TPG_GET_IN_TOUCH_EMAIL, toEmail, subject, payload, htmlPayload );
