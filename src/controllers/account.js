@@ -438,7 +438,7 @@ exports.subscribeToTPGNewsletter = asyncHandler(async (req, res, next) => {
     Best regards,
     The Phoenix Guild
     Website: www.thephoenixguild.org
-    Contact Email: admin@naksh.org
+    Contact Email: thephoenixguild2022@gmail.com
     Twitter: @PhoenixGuildHQ
     `;
 
@@ -512,7 +512,7 @@ exports.subscribeToTPGNewsletter = asyncHandler(async (req, res, next) => {
                 <p>
                 <b>The Phoenix Guild</b><br>
                 Visit our website: <a href="https://www.thephoenixguild.org/"><b>www.thephoenixguild.org</b></a><br>
-                Contact us anytime at: <a href="mailto:getintouch.tpg@gmail.com?subject=Re:%20TPG%20Newsletter"><b>getintouch.tpg@gmail.com</b></a><br>
+                Contact us anytime at: <a href="mailto:getintouch.tpg@gmail.com?subject=Re:%20TPG%20Newsletter"><b>thephoenixguild2022@gmail.com</b></a><br>
                 Follow us on Twitter: <a href="https://twitter.com/PhoenixGuildHQ"><b>@PhoenixGuildHQ</b></a>
                 </p>
             </div>
@@ -550,7 +550,7 @@ exports.loginTPG = asyncHandler( async (req, res, next) => {
 
     const payload = `TPG OTP for login is ${otp}. It will expire in 5 minutes.`;
 
-    const email = await sendEmail( process.env.NAKSH_ADMIN_EMAIL, process.env.TPG_GET_IN_TOUCH_EMAIL, subject, payload, undefined );
+    const email = await sendEmail( process.env.TPG_GET_IN_TOUCH_EMAIL, process.env.MAIN_TPG_EMAIL, subject, payload, undefined );
 
     return res.status(200).send({
 
@@ -626,6 +626,12 @@ exports.sendTPGFeedback = asyncHandler(async (req, res, next) => {
             break;
         case 'karnataka':
             toEmail = process.env.KARNATAKA_TPG_EMAIL;
+            break;
+        case 'ahmedabad':
+            toEmail = process.env.AHMEDABAD_TPG_EMAIL;
+            break;
+        case 'kualalumpur':
+            toEmail = process.env.KUALALUMPUR_TPG_EMAIL;
             break;
         case 'main':
             toEmail = process.env.MAIN_TPG_EMAIL;

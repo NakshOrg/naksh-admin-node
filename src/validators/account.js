@@ -25,7 +25,7 @@ exports.subscribeToTPGNewsletterBody = Joi.object().keys({
 
 exports.sendTPGFeedbackQuery = Joi.object().keys({
 
-    location: Joi.string().valid('delhi', 'jaipur', 'kolkata', 'pune', 'bhopal', 'hyderabad', 'chennai', 'kerala', 'karnataka', 'main').required()
+    location: Joi.string().valid('delhi', 'jaipur', 'kolkata', 'pune', 'bhopal', 'hyderabad', 'chennai', 'kerala', 'karnataka', 'ahmedabad', 'kualalumpur', 'main').required()
 
 });
 
