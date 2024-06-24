@@ -27,8 +27,9 @@ const pinata = pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECR
 
 const axios = require('axios').default;
 const { parse } = require("node-html-parser");
+
 const axiosInstance = axios.create({
-    baseURL: `https://api.lu.ma/profile`,
+    baseURL: `https://api.lu.ma/calendar/get-items`,
     timeout: 3000
 });
 
@@ -356,40 +357,52 @@ exports.verifyOtp = asyncHandler( async (req, res, next) => {
 
 exports.lumaWebScrape = asyncHandler(async (req, res, next) => {
 
-    let response = await axiosInstance.get('?host_api_id=usr-hzW4RWAY0WDRlX3');
+    let [pastResponse, futureResponse] = await Promise.all([
+        axiosInstance.get('?calendar_api_id=cal-zxT2C4YhNtTkqBE&period=past&pagination_limit=20',{
+            headers: {
+                "Cookie": "luma.referring-calendar=cal-zxT2C4YhNtTkqBE; luma.did=gcabcqowvprpsox6eeprioifak2dtu; luma.first-page=%2Fgoogle%3Fcode%3D4%252F0ATx3LY70ah0l-L_AazwR6YgvZbIAMQQE07FESjM9QLmrBlcEwDQ_3M5nQUsh0-A4jZIoLg%26scope%3Demail%2520profile%2520openid%2520https%253A%252F%252Fwww.googleapis.com%252Fauth%252Fuserinfo.profile%2520https%253A%252F%252Fwww.googleapis.com%252Fauth%252Fuserinfo.email%26authuser%3D0%26prompt%3Dconsent; luma.first-referrer=https%3A%2F%2Faccounts.google.com%2F; luma.auth-session-key=usr-VQ1fUDnoK05KMF5.9jdn2yzws51hozr8yzqy; __cf_bm=J8_NDrVT1Vr7OkNwtaslaRqalifnG1ku.18IHBcZpoQ-1719246921-1.0.1.1-S3LU_5F6bXjHKNdG29FeX2FatmKSRSDm7dg0ah26O0KA60BVqNt_xYubDtnFHfvIUHESTAz2UCYBOtK6JpxJ0w"
+            }
+        }),
+        axiosInstance.get('?calendar_api_id=cal-zxT2C4YhNtTkqBE&period=future&pagination_limit=20',{
+            headers: {
+                "Cookie": "luma.referring-calendar=cal-zxT2C4YhNtTkqBE; luma.did=gcabcqowvprpsox6eeprioifak2dtu; luma.first-page=%2Fgoogle%3Fcode%3D4%252F0ATx3LY70ah0l-L_AazwR6YgvZbIAMQQE07FESjM9QLmrBlcEwDQ_3M5nQUsh0-A4jZIoLg%26scope%3Demail%2520profile%2520openid%2520https%253A%252F%252Fwww.googleapis.com%252Fauth%252Fuserinfo.profile%2520https%253A%252F%252Fwww.googleapis.com%252Fauth%252Fuserinfo.email%26authuser%3D0%26prompt%3Dconsent; luma.first-referrer=https%3A%2F%2Faccounts.google.com%2F; luma.auth-session-key=usr-VQ1fUDnoK05KMF5.9jdn2yzws51hozr8yzqy; __cf_bm=J8_NDrVT1Vr7OkNwtaslaRqalifnG1ku.18IHBcZpoQ-1719246921-1.0.1.1-S3LU_5F6bXjHKNdG29FeX2FatmKSRSDm7dg0ah26O0KA60BVqNt_xYubDtnFHfvIUHESTAz2UCYBOtK6JpxJ0w"
+            }
+        })
+    ]);
 
-    const data = response.data;
+    const entries = [...futureResponse.data.entries, ...pastResponse.data.entries].slice(0, 20);
 
     let events = [];
     
-    for(let event of data.events.reverse()) {
+    for(let entry of entries) {
+
         let eventObj = {};
-        eventObj.name = event.name? event.name : null;
-        eventObj.cover = event.cover_url? event.cover_url : null;
+        eventObj.name = entry.event.name ?? null;
+        eventObj.cover = entry.event.cover_url ?? null;
         eventObj.description = "";
-        event.description_mirror?.content?.forEach(description => {
-            if(description.type == "paragraph") {
-                description.content?.forEach(content => {
-                    if(content.type == "text") {
-                        eventObj.description += content.text;
-                    }
-                    if(content.type == "hard_break") {
-                        eventObj.description += "\n";
-                    }
-                });
-            } else {
-                eventObj.description += null;
-            }
-            eventObj.description += "\n";
-        });
-        eventObj.start = event.start_at? event.start_at : null;
-        eventObj.end = event.end_at? event.end_at : null;
-        eventObj.city = event.geo_address_info?.city ? event.geo_address_info.city : null;
-        eventObj.state = event.geo_address_info?.region ? event.geo_address_info.region : null;
-        eventObj.country = event.geo_address_info?.country ? event.geo_address_info.country : null;
-        eventObj.type = event.location_type ? event.location_type : null;
-        eventObj.ongoing = dayjs().isBefore(dayjs(event.end_at)) ? true : false;
-        eventObj.url = event.url ? `https://lu.ma/${event.url}` : null;
+        // entry.event.description_mirror?.content?.forEach(description => {
+        //     if(description.type == "paragraph") {
+        //         description.content?.forEach(content => {
+        //             if(content.type == "text") {
+        //                 eventObj.description += content.text;
+        //             }
+        //             if(content.type == "hard_break") {
+        //                 eventObj.description += "\n";
+        //             }
+        //         });
+        //     } else {
+        //         eventObj.description += null;
+        //     }
+        //     eventObj.description += "\n";
+        // });
+        eventObj.start = entry.event.start_at ?? null;
+        eventObj.end = entry.event.end_at ?? null;
+        eventObj.city = entry.event.geo_address_info?.city ?? null;
+        eventObj.state = entry.event.geo_address_info?.region ?? null;
+        eventObj.country = entry.event.geo_address_info?.country ?? null;
+        eventObj.type = entry.event.location_type ?? null;
+        eventObj.ongoing = dayjs().isBefore(dayjs(entry.event.end_at)) ? true : false;
+        eventObj.url = entry.event.url ? `https://lu.ma/${entry.event.url}` : null;
         events.push(eventObj);
     }
 
